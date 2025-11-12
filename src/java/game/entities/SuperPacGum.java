@@ -12,7 +12,7 @@ public class SuperPacGum extends StaticEntity {
 
     @Override
     public void render(Graphics2D g) {
-        //Pour faire en sorte que les SuperPacGums clignotent, on ne fait le rendu que 30 frames sur 60.
+        //SuperPacGum이 깜빡이도록 하기 위해, 60프레임 중 30프레임만 렌더링한다
         if (frameCount%60 < 30) {
             g.setColor(new Color(255, 183, 174));
             g.fillOval(this.xPos, this.yPos, this.size, this.size);

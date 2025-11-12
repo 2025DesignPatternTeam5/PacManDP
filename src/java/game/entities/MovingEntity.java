@@ -35,12 +35,12 @@ public abstract class MovingEntity extends Entity {
     }
 
     public void updatePosition() {
-        //Mise à jour de la position de l'entité
-        if (!(xSpd == 0 && ySpd == 0)) { //Si la vitesse horizontale ou la vitesse verticale n'est pas nulle, on incrémente la position horizontale et verticale en conséquence
+        //엔티티 위치 업데이트
+        if (!(xSpd == 0 && ySpd == 0)) { //수평 속도나 수직 속도가 0이 아니면, 그에 따라 수평 위치와 수직 위치를 증가시킨다
             xPos+=xSpd;
             yPos+=ySpd;
 
-            //En fonction de la direction emprunté, on change la valeur de la direction (un entier permettant de savoir la partie de l'image à afficher notamment)
+            //이동한 방향에 따라 방향 값을 변경한다 (특히 어떤 이미지 부분을 표시할지 결정하는 정수 값)
             if (xSpd > 0) {
                 direction = 0;
             } else if (xSpd < 0) {
@@ -51,14 +51,14 @@ public abstract class MovingEntity extends Entity {
                 direction = 3;
             }
 
-            //On incrémente la valeur de l'image courante de l'animation à afficher (la vitesse peut varier), et selon le nombre d'images de l'animation, la valeur fait une boucle
+            //표시할 애니메이션의 현재 이미지 값을 증가시킨다(속도는 가변적이며), 애니메이션 이미지 수에 따라 값이 반복(loop)된다
             subimage += imageSpd;
             if (subimage >= nbSubimagesPerCycle) {
                 subimage = 0;
             }
         }
 
-        //Si l'entité va au dela des bords de la zone de jeu, elle passe de l'autre côté
+        //엔티티가 게임 구역의 경계를 넘어가면 반대쪽으로 나온다
         if (xPos > GameplayPanel.width) {
             xPos = 0 - size + spd;
         }
@@ -78,17 +78,17 @@ public abstract class MovingEntity extends Entity {
 
     @Override
     public void render(Graphics2D g) {
-        //Par défaut, on considère que chaque "sprite" contient 4 variations de l'animation correspondant à une direction et chaque animation a un certain nombre d'images
-        //En sachant cela, on affiche seulement la partie de l'image du sprite correspondant à la bonne direction et à la bonne frame de l'animation
+        //기본적으로, 각 스프라이트는 방향마다 4가지 애니메이션 변형을 포함하며, 각 애니메이션은 일정한 수의 이미지로 구성된다
+        //이를 기반으로, 올바른 방향과 애니메이션 프레임에 해당하는 스프라이트 이미지 부분만 화면에 표시한다
         g.drawImage(sprite.getSubimage((int)subimage * size + direction * size * nbSubimagesPerCycle, 0, size, size), this.xPos, this.yPos,null);
     }
 
-    //Méthode pour savoir si l'entité est bien positionnée sur une case de la grille de la zone de jeu ou non
+    //엔티티가 게임 구역의 그리드 한 칸 위에 정확히 위치했는지 확인하는 메서드
     public boolean onTheGrid() {
         return (xPos%8 == 0 && yPos%8 == 0);
     }
 
-    //Méthode pour savoir si l'entité est dans la zone de jeu ou non
+    //엔티티가 게임 구역 안에 있는지 여부를 확인하는 메서드
     public boolean onGameplayWindow() { return !(xPos<=0 || xPos>= GameplayPanel.width || yPos<=0 || yPos>= GameplayPanel.height); }
 
     public Rectangle getHitbox() {

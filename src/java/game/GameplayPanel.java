@@ -8,7 +8,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
-//Panneau de la "zone de jeu"
+//"게임 구역" 패널
 public class GameplayPanel extends JPanel implements Runnable {
     public static int width;
     public static int height;
@@ -53,7 +53,7 @@ public class GameplayPanel extends JPanel implements Runnable {
         game = new Game();
     }
 
-    //mise à jour du jeu
+    //게임 상태 업데이트
     public void update() {
         game.update();
     }
@@ -63,7 +63,7 @@ public class GameplayPanel extends JPanel implements Runnable {
         game.input(key);
     }
 
-    //"rendu du jeu" ; on prépare ce qui va être affiché en dessinant sur une "image" : un fond et les entités du jeu au dessus
+    //'게임 렌더링': 화면에 표시될 내용을 준비하는 단계로, 배경과 그 위에 게임의 모든 엔티티를 이미지에 그린다
     public void render() {
         if (g != null) {
             g.drawImage(backgroundImage, 0, 0, width, height, null);
@@ -71,7 +71,7 @@ public class GameplayPanel extends JPanel implements Runnable {
         }
     }
 
-    //Affichage du jeu : on affiche l'image avec le rendu
+    //게임 화면 표시: 렌더링된 이미지를 화면에 그린다
     public void draw() {
         Graphics g2 = this.getGraphics();
         g2.drawImage(img, 0, 0, width, height, null);

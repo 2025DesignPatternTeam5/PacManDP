@@ -8,7 +8,7 @@ import game.ghostStates.FrightenedMode;
 import javax.swing.*;
 import java.awt.*;
 
-//Panneau de l'interface utilisateur
+//UI 패널
 public class UIPanel extends JPanel implements Observer {
     public static int width;
     public static int height;
@@ -36,7 +36,7 @@ public class UIPanel extends JPanel implements Observer {
         return score;
     }
 
-    //L'interface est notifiée lorsque Pacman est en contact avec une PacGum, une SuperPacGum ou un fantôme, et on met à jour le score affiché en conséquence
+    //팩맨이 PacGum, SuperPacGum 또는 유령과 접촉하면 인터페이스에 알림이 가고, 그에 따라 표시된 점수를 갱신한다
     @Override
     public void updatePacGumEaten(PacGum pg) {
         updateScore(10);
@@ -49,7 +49,8 @@ public class UIPanel extends JPanel implements Observer {
 
     @Override
     public void updateGhostCollision(Ghost gh) {
-        if (gh.getState() instanceof FrightenedMode) { //Dans le cas où Pacman est en contact avec un fantôme on ne met à jour le score que lorsque ce dernier est en mode "frightened"
+        //팩맨이 유령과 접촉할 경우, 유령이 '겁먹은(frightened)' 모드일 때만 점수를 갱신한다
+        if (gh.getState() instanceof FrightenedMode) {
             updateScore(500);
         }
     }

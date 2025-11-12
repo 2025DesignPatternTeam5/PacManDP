@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Arrays;
 
-//Classe pour gérer la lecture des fichiers csv
+//CSV 파일 읽기를 관리하는 클래스
 public class CsvReader {
     public List<List<String>> parseCsv(URI file) {
         List<List<String>> data = new ArrayList<>();
