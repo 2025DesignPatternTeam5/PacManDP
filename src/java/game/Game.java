@@ -134,6 +134,7 @@ public class Game implements Observer {
     //팩맨이 PacGum, SuperPacGum 또는 유령과 접촉(충돌?)할 때 게임이 알림을 받는다
     @Override
     public void updatePacGumEaten(PacGum pg) {
+        pacman.initPacgumTimer();
         pg.destroy(); //La PacGum est détruite quand Pacman la mange
     }
 
