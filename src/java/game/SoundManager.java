@@ -1,9 +1,5 @@
 package game;
 
-import game.entities.PacGum;
-import game.entities.SuperPacGum;
-import game.entities.ghosts.Ghost;
-
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
@@ -49,6 +45,11 @@ public class SoundManager {
         Clip clip = soundMap.get(sound);
         clip.stop();
         clip.setFramePosition(0);
+    }
+
+    //Test를 위한 Getter함수
+    public Clip getClip(Sound sound) {
+        return soundMap.get(sound);
     }
 
     //모든 사운드 파일을 보관
