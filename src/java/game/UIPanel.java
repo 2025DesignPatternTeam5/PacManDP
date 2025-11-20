@@ -3,6 +3,7 @@ package game;
 import game.entities.PacGum;
 import game.entities.SuperPacGum;
 import game.entities.ghosts.Ghost;
+import game.entities.items.Item;
 import game.ghostStates.FrightenedMode;
 
 import javax.swing.*;
@@ -53,5 +54,10 @@ public class UIPanel extends JPanel implements Observer {
         if (gh.getState() instanceof FrightenedMode) {
             updateScore(500);
         }
+    }
+
+    @Override
+    public void updateItemEaten(Item item) {
+        updateScore(item.getPoint());
     }
 }

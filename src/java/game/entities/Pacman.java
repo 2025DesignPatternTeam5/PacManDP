@@ -4,6 +4,7 @@ import game.Game;
 import game.Observer;
 import game.Sujet;
 import game.entities.ghosts.Ghost;
+import game.entities.items.Item;
 import game.utils.CollisionDetector;
 import game.utils.KeyHandler;
 import game.utils.WallCollisionDetector;
@@ -79,6 +80,11 @@ public class Pacman extends MovingEntity implements Sujet {
             notifyObserverGhostCollision(gh);
         }
 
+        Item item = (Item) collisionDetector.checkCollision(this, Item.class);
+        if (item != null) {
+            notifyObserverItemEaten(item);
+        }
+
         //팩맨의 다음 잠재적 위치에 벽이 없으면, 팩맨의 위치를 갱신한다
         if (!WallCollisionDetector.checkWallCollision(this, xSpd, ySpd)) {
             updatePosition();
@@ -112,5 +118,10 @@ public class Pacman extends MovingEntity implements Sujet {
     @Override
     public void notifyObserverGhostCollision(Ghost gh) {
         observerCollection.forEach(obs -> obs.updateGhostCollision(gh));
+    }
+
+    @Override
+    public void notifyObserverItemEaten(Item item) {
+        observerCollection.forEach(obs-> obs.updateItemEaten(item));
     }
 }

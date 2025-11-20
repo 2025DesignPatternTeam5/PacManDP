@@ -3,9 +3,12 @@ package game;
 import game.entities.*;
 import game.entities.ghosts.Blinky;
 import game.entities.ghosts.Ghost;
+import game.entities.items.Item;
 import game.ghostFactory.*;
 import game.ghostStates.EatenMode;
 import game.ghostStates.FrightenedMode;
+import game.itemFactory.AbstractItemFactory;
+import game.itemFactory.CherryFactory;
 import game.utils.CollisionDetector;
 import game.utils.CsvReader;
 import game.utils.KeyHandler;
@@ -43,6 +46,7 @@ public class Game implements Observer {
 
         CollisionDetector collisionDetector = new CollisionDetector(this);
         AbstractGhostFactory abstractGhostFactory = null;
+        AbstractItemFactory abstractItemFactory = null;
 
         //레벨에는 '그리드(격자)'가 있으며, CSV 파일의 각 칸마다 포함된 문자에 따라 그리드의 해당 칸에 특정 엔티티를 표시한다.
         for(int xx = 0 ; xx < cellsPerRow ; xx++) {
@@ -79,7 +83,14 @@ public class Game implements Observer {
                         blinky = (Blinky) ghost;
                     }
                 }else if (dataChar.equals(".")) { //팩검(팩맨 먹이) 생성
-                    objects.add(new PacGum(xx * cellSize, yy * cellSize));
+                    // random하게 Item소환..
+                    // 추가적으로 factory 재사용을 위해 singleton생각해봐야할듯..
+                    abstractItemFactory = new CherryFactory();
+                    Item item = abstractItemFactory.makeItem(xx * cellSize, yy * cellSize);
+                    objects.add(item);
+
+
+//                    objects.add(new PacGum(xx * cellSize, yy * cellSize));
                 }else if (dataChar.equals("o")) { //슈퍼팩검 생성
                     objects.add(new SuperPacGum(xx * cellSize, yy * cellSize));
                 }else if (dataChar.equals("-")) { //팩맨 게임에서 유령들이 시작하거나 되돌아오는 ‘유령의 집’ 영역의 벽을 생성
@@ -154,6 +165,11 @@ public class Game implements Observer {
             System.out.println("Game over !\nScore : " + GameLauncher.getUIPanel().getScore());
             System.exit(0); //TODO
         }
+    }
+
+    // 미완 - 아이템에 따라 Pacman에게 어떤 영향을 줘여함.
+    public void updateItemEaten(Item item) {
+        item.destroy();
     }
 
     public static void setFirstInput(boolean b) {
