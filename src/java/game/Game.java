@@ -6,6 +6,7 @@ import game.entities.ghosts.Ghost;
 import game.ghostFactory.*;
 import game.ghostStates.EatenMode;
 import game.ghostStates.FrightenedMode;
+import game.ghostStates.GhostState;
 import game.utils.CollisionDetector;
 import game.utils.CsvReader;
 import game.utils.KeyHandler;
@@ -26,6 +27,8 @@ public class Game implements Observer {
     private static Blinky blinky;
 
     private static boolean firstInput = false;
+    private GhostState state;
+    private int level = 2;
 
     public Game(){
         //게임 초기
@@ -73,7 +76,7 @@ public class Game implements Observer {
                             break;
                     }
 
-                    Ghost ghost = abstractGhostFactory.makeGhost(xx * cellSize, yy * cellSize);
+                    Ghost ghost = abstractGhostFactory.makeGhost(xx * cellSize, yy * cellSize, level);
                     ghosts.add(ghost);
                     if (dataChar.equals("b")) {
                         blinky = (Blinky) ghost;
@@ -150,9 +153,9 @@ public class Game implements Observer {
         if (gh.getState() instanceof FrightenedMode) {
             gh.getState().eaten(); //유령이 먹혔을 때 특별한 전환이 존재하면, 그 상태가 그에 맞게 변경된다
         }else if (!(gh.getState() instanceof EatenMode)) {
-            //팩맨이 겁먹지 않았고 먹히지도 않은 유령과 접촉하면 게임 오버!
-            System.out.println("Game over !\nScore : " + GameLauncher.getUIPanel().getScore());
-            System.exit(0); //TODO
+//            //팩맨이 겁먹지 않았고 먹히지도 않은 유령과 접촉하면 게임 오버!
+//            System.out.println("Game over !\nScore : " + GameLauncher.getUIPanel().getScore());
+//            System.exit(0); //TODO
         }
     }
 

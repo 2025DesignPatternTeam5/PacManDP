@@ -19,6 +19,7 @@ public abstract class Ghost extends MovingEntity {
     protected final GhostState frightenedMode;
     protected final GhostState eatenMode;
     protected final GhostState houseMode;
+    protected final GhostState stayMode;
 
     protected int modeTimer = 0;
     protected int frightenedTimer = 0;
@@ -39,8 +40,9 @@ public abstract class Ghost extends MovingEntity {
         frightenedMode = new FrightenedMode(this);
         eatenMode = new EatenMode(this);
         houseMode = new HouseMode(this);
+        stayMode = new StayMode(this);
 
-        state = houseMode; //état initial
+        state = stayMode; //état initial
 
         try {
             frightenedSprite1 = ImageIO.read(getClass().getClassLoader().getResource("img/ghost_frightened.png"));
