@@ -17,6 +17,7 @@ import java.awt.*;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 //게임 자체를 관리하는 클래스
 public class Game implements Observer {
@@ -27,6 +28,7 @@ public class Game implements Observer {
 
     private static Pacman pacman;
     private static Blinky blinky;
+    private int pacGumCount = 0;
 
     private static boolean firstInput = false;
 
@@ -43,10 +45,15 @@ public class Game implements Observer {
         int cellsPerRow = data.get(0).size();
         int cellsPerColumn = data.size();
         int cellSize = 8;
+        this.pacGumCount = 0;
 
         CollisionDetector collisionDetector = new CollisionDetector(this);
         AbstractGhostFactory abstractGhostFactory = null;
-        AbstractItemFactory abstractItemFactory = null;
+        List<AbstractItemFactory> itemfactories = new ArrayList<>();
+        itemfactories.add(new CherryFactory());
+
+        Random random = new Random();
+
 
         //레벨에는 '그리드(격자)'가 있으며, CSV 파일의 각 칸마다 포함된 문자에 따라 그리드의 해당 칸에 특정 엔티티를 표시한다.
         for(int xx = 0 ; xx < cellsPerRow ; xx++) {
@@ -83,14 +90,16 @@ public class Game implements Observer {
                         blinky = (Blinky) ghost;
                     }
                 }else if (dataChar.equals(".")) { //팩검(팩맨 먹이) 생성
-                    // random하게 Item소환..
-                    // 추가적으로 factory 재사용을 위해 singleton생각해봐야할듯..
-                    abstractItemFactory = new CherryFactory();
-                    Item item = abstractItemFactory.makeItem(xx * cellSize, yy * cellSize);
-                    objects.add(item);
-
-
-//                    objects.add(new PacGum(xx * cellSize, yy * cellSize));
+                    // random하게 Item소환.
+                    if (random.nextDouble() < 0.05) {
+                        int randomIndex = random.nextInt(itemfactories.size());
+                        Item item = itemfactories.get(randomIndex).makeItem(xx * cellSize, yy * cellSize);
+                        objects.add(item);
+                    }
+                    else {
+                        objects.add(new PacGum(xx * cellSize, yy * cellSize));
+                        this.pacGumCount++;
+                    }
                 }else if (dataChar.equals("o")) { //슈퍼팩검 생성
                     objects.add(new SuperPacGum(xx * cellSize, yy * cellSize));
                 }else if (dataChar.equals("-")) { //팩맨 게임에서 유령들이 시작하거나 되돌아오는 ‘유령의 집’ 영역의 벽을 생성
@@ -121,6 +130,12 @@ public class Game implements Observer {
         for (Entity o: objects) {
             if (!o.isDestroyed()) o.update();
         }
+        if (this.pacGumCount <= 0)
+        {
+            // pacMan이 apcGum을 모두 먹었다면,
+            System.out.println("Game over !\nScore : " + GameLauncher.getUIPanel().getScore());
+            System.exit(0); //TODO
+        }
     }
 
     //사용자 입력 관리
@@ -146,6 +161,7 @@ public class Game implements Observer {
     @Override
     public void updatePacGumEaten(PacGum pg) {
         pg.destroy(); //La PacGum est détruite quand Pacman la mange
+        this.pacGumCount--;
     }
 
     @Override
