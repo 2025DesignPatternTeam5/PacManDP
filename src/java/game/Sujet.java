@@ -11,4 +11,5 @@ public interface Sujet {
     void notifyObserverPacGumEaten(PacGum pg);
     void notifyObserverSuperPacGumEaten(SuperPacGum spg);
     void notifyObserverGhostCollision(Ghost gh);
+    void notifyObserverPacmanDead();
 }

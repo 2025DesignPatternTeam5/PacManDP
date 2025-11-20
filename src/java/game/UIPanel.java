@@ -5,8 +5,11 @@ import game.entities.SuperPacGum;
 import game.entities.ghosts.Ghost;
 import game.ghostStates.FrightenedMode;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 
 //UI 패널
 public class UIPanel extends JPanel implements Observer {
@@ -15,6 +18,8 @@ public class UIPanel extends JPanel implements Observer {
 
     private int score = 0;
     private JLabel scoreLabel;
+
+    private LifeUIPanel lifePanel;
 
     public UIPanel(int width, int height) {
         this.width = width;
@@ -25,10 +30,16 @@ public class UIPanel extends JPanel implements Observer {
         scoreLabel.setFont(scoreLabel.getFont().deriveFont(20.0F));
         scoreLabel.setForeground(Color.white);
         this.add(scoreLabel, BorderLayout.WEST);
+        lifePanel = new LifeUIPanel(3000);
+    }
+
+    public LifeUIPanel getLifePanel() {
+        return lifePanel;
     }
 
     public void updateScore(int incrScore) {
         this.score += incrScore;
+        this.lifePanel.increaseScore(incrScore);
         this.scoreLabel.setText("Score: " + score);
     }
 
@@ -53,5 +64,10 @@ public class UIPanel extends JPanel implements Observer {
         if (gh.getState() instanceof FrightenedMode) {
             updateScore(500);
         }
+    }
+
+    @Override
+    public void updatePacmanDead() {
+        lifePanel.lifeDecrease();
     }
 }

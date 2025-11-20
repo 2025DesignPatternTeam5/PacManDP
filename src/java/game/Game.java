@@ -153,8 +153,13 @@ public class Game implements Observer {
         }else if (!(gh.getState() instanceof EatenMode)) {
             //팩맨이 겁먹지 않았고 먹히지도 않은 유령과 접촉하면 게임 오버!
             System.out.println("Game over !\nScore : " + GameLauncher.getUIPanel().getScore());
-            System.exit(0); //TODO
+            pacman.die();//팩맨 사망
         }
+    }
+
+    @Override
+    public void updatePacmanDead() {
+        //여기에다가 팩맨 죽었을 때 게임 다시 초기화하는 로직 작성할 것
     }
 
     public static void setFirstInput(boolean b) {

@@ -1,9 +1,6 @@
 package game.entities;
 
-import game.Game;
-import game.Observer;
-import game.SoundManager;
-import game.Sujet;
+import game.*;
 import game.entities.ghosts.Ghost;
 import game.utils.CollisionDetector;
 import game.utils.KeyHandler;
@@ -18,12 +15,12 @@ public class Pacman extends MovingEntity implements Sujet {
 
     private CollisionDetector collisionDetector;
     private List<Observer> observerCollection;
-    private float pacgumTimer;
+    private float pacgumSoundTimer;
 
     public Pacman(int xPos, int yPos) {
         super(32, xPos, yPos, 2, "pacman.png", 4, 0.3f);
         observerCollection = new ArrayList<>();
-        pacgumTimer = 0f;
+        pacgumSoundTimer = 0f;
     }
 
     //이동 처리
@@ -90,9 +87,9 @@ public class Pacman extends MovingEntity implements Sujet {
         }
 
         //팩검 타이머가 0이 되면 팩검 섭취 사운드를 정지시킴.
-        if (pacgumTimer > 0f) {
-            pacgumTimer--;
-            if (pacgumTimer <= 0f) {
+        if (pacgumSoundTimer > 0f) {
+            pacgumSoundTimer--;
+            if (pacgumSoundTimer <= 0f) {
                 SoundManager.getInstance().stop(SoundManager.Sound.PAC_DOT);
             }
         }
@@ -127,8 +124,18 @@ public class Pacman extends MovingEntity implements Sujet {
         observerCollection.forEach(obs -> obs.updateGhostCollision(gh));
     }
 
+    @Override
+    public void notifyObserverPacmanDead() {
+        observerCollection.forEach(obs -> obs.updatePacmanDead());
+    }
+
     //팩맨의 팩검 섭취 사운드 출력 관련 타이머를 초기화하는 함수.팩맨이 팩검 섭취 시 옵저버가 이 함수를 실행하도록 해야함.
     public void initPacgumTimer() {
-        pacgumTimer = PACGUM_INIT_TIMER;
+        pacgumSoundTimer = PACGUM_INIT_TIMER;
+    }
+
+    //사망
+    public void die() {
+        notifyObserverPacmanDead();
     }
 }

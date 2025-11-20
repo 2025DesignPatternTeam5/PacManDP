@@ -62,9 +62,11 @@ public abstract class Ghost extends MovingEntity {
 
     //Méthodes pour les transitions entre les différents états
     public void switchChaseMode() {
+        modeTimer = 0;
         state = chaseMode;
     }
     public void switchScatterMode() {
+        modeTimer = 0;
         state = scatterMode;
     }
 
