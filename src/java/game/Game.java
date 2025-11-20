@@ -7,8 +7,7 @@ import game.entities.items.Item;
 import game.ghostFactory.*;
 import game.ghostStates.EatenMode;
 import game.ghostStates.FrightenedMode;
-import game.itemFactory.AbstractItemFactory;
-import game.itemFactory.CherryFactory;
+import game.itemFactory.*;
 import game.utils.CollisionDetector;
 import game.utils.CsvReader;
 import game.utils.KeyHandler;
@@ -51,6 +50,9 @@ public class Game implements Observer {
         AbstractGhostFactory abstractGhostFactory = null;
         List<AbstractItemFactory> itemfactories = new ArrayList<>();
         itemfactories.add(new CherryFactory());
+        itemfactories.add(new AppleFactory());
+        itemfactories.add(new WaterMelonFactory());
+
 
         Random random = new Random();
 
