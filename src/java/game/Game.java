@@ -4,6 +4,8 @@ import game.entities.*;
 import game.entities.ghosts.Blinky;
 import game.entities.ghosts.Ghost;
 import game.entities.items.Item;
+import game.entities.items.Phantom;
+import game.entities.items.SpeedUp;
 import game.ghostFactory.*;
 import game.ghostStates.EatenMode;
 import game.ghostStates.FrightenedMode;
@@ -51,7 +53,9 @@ public class Game implements Observer {
         List<AbstractItemFactory> itemfactories = new ArrayList<>();
         itemfactories.add(new CherryFactory());
         itemfactories.add(new AppleFactory());
-        itemfactories.add(new WaterMelonFactory());
+        itemfactories.add(new WatermelonFactory());
+        itemfactories.add(new PhantomFactory());
+        itemfactories.add(new SpeedUpFactory());
 
 
         Random random = new Random();
@@ -178,7 +182,8 @@ public class Game implements Observer {
     public void updateGhostCollision(Ghost gh) {
         if (gh.getState() instanceof FrightenedMode) {
             gh.getState().eaten(); //유령이 먹혔을 때 특별한 전환이 존재하면, 그 상태가 그에 맞게 변경된다
-        }else if (!(gh.getState() instanceof EatenMode)) {
+        }
+        else if (!(gh.getState() instanceof EatenMode)) {
             //팩맨이 겁먹지 않았고 먹히지도 않은 유령과 접촉하면 게임 오버!
             System.out.println("Game over !\nScore : " + GameLauncher.getUIPanel().getScore());
             System.exit(0); //TODO
@@ -187,6 +192,18 @@ public class Game implements Observer {
 
     // 미완 - 아이템에 따라 Pacman에게 어떤 영향을 줘여함.
     public void updateItemEaten(Item item) {
+
+        if (item instanceof SpeedUp) {
+            // 이속 2배 증가
+            pacman.switchSpeedUpState();
+            System.out.println("BUFF: Speed UP!");
+        }
+        else if (item instanceof Phantom) {
+            // 무적
+            pacman.switchPhantomState();
+            System.out.println("BUFF: Invincible!");
+        }
+
         item.destroy();
     }
 

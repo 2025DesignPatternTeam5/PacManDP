@@ -59,5 +59,6 @@ public class UIPanel extends JPanel implements Observer {
     @Override
     public void updateItemEaten(Item item) {
         updateScore(item.getPoint());
+        // 추가적으로 아이템을 먹었으면 해당 이미지를 panel 하단에 출력하게 하면 좋을 듯.
     }
 }
