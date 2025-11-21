@@ -6,6 +6,8 @@ import game.utils.WallCollisionDetector;
 
 //Classe pour décrire l'état concret d'un fantôme dans sa maison
 public class HouseMode extends GhostState{
+
+
     public HouseMode(Ghost ghost) {
         super(ghost);
     }

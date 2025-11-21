@@ -10,6 +10,7 @@ import game.ghostFactory.*;
 import game.ghostStates.EatenMode;
 import game.ghostStates.FrightenedMode;
 import game.itemFactory.*;
+import game.ghostStates.GhostState;
 import game.utils.CollisionDetector;
 import game.utils.CsvReader;
 import game.utils.KeyHandler;
@@ -32,6 +33,8 @@ public class Game implements Observer {
     private int pacGumCount = 0;
 
     private static boolean firstInput = false;
+    private GhostState state;
+    private int level = 2;
 
     public Game(){
         //게임 초기
@@ -90,7 +93,7 @@ public class Game implements Observer {
                             break;
                     }
 
-                    Ghost ghost = abstractGhostFactory.makeGhost(xx * cellSize, yy * cellSize);
+                    Ghost ghost = abstractGhostFactory.makeGhost(xx * cellSize, yy * cellSize, level);
                     ghosts.add(ghost);
                     if (dataChar.equals("b")) {
                         blinky = (Blinky) ghost;
