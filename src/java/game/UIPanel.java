@@ -3,6 +3,7 @@ package game;
 import game.entities.PacGum;
 import game.entities.SuperPacGum;
 import game.entities.ghosts.Ghost;
+import game.entities.items.Item;
 import game.ghostStates.FrightenedMode;
 
 import javax.swing.*;
@@ -53,5 +54,11 @@ public class UIPanel extends JPanel implements Observer {
         if (gh.getState() instanceof FrightenedMode) {
             updateScore(500);
         }
+    }
+
+    @Override
+    public void updateItemEaten(Item item) {
+        updateScore(item.getPoint());
+        // 추가적으로 아이템을 먹었으면 해당 이미지를 panel 하단에 출력하게 하면 좋을 듯.
     }
 }

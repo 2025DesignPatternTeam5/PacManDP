@@ -4,21 +4,33 @@ import game.Game;
 import game.Observer;
 import game.Sujet;
 import game.entities.ghosts.Ghost;
+import game.entities.items.Item;
 import game.utils.CollisionDetector;
 import game.utils.KeyHandler;
 import game.utils.WallCollisionDetector;
+import game.pacmanStates.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 //팩맨 클래스
 public class Pacman extends MovingEntity implements Sujet {
+    private PacmanState state;
+
+    protected final PacmanState normalState;
+    protected final PacmanState speedUpState;
+    protected final PacmanState phantomState;
+
     private CollisionDetector collisionDetector;
     private List<Observer> observerCollection;
 
     public Pacman(int xPos, int yPos) {
         super(32, xPos, yPos, 2, "pacman.png", 4, 0.3f);
         observerCollection = new ArrayList<>();
+        this.normalState = new NormalState(this);
+        this.speedUpState = new SpeedUpState(this);
+        this.phantomState = new PhantomState(this);
+        this.state = this.normalState;
     }
 
     //이동 처리
@@ -63,6 +75,7 @@ public class Pacman extends MovingEntity implements Sujet {
 
     @Override
     public void update() {
+        state.update();
         //팩맨이 PacGum, SuperPacGum 또는 유령과 접촉했는지 매번 확인하고, 그에 따라 옵저버들에게 알림을 보낸다
         PacGum pg = (PacGum) collisionDetector.checkCollision(this, PacGum.class);
         if (pg != null) {
@@ -76,10 +89,34 @@ public class Pacman extends MovingEntity implements Sujet {
 
         Ghost gh = (Ghost) collisionDetector.checkCollision(this, Ghost.class);
         if (gh != null) {
-            notifyObserverGhostCollision(gh);
+            if (!state.isInvincible()) {
+                notifyObserverGhostCollision(gh);
+            } else {
+                System.out.println("Phantom state.(무적)");
+            }
         }
 
-        //팩맨의 다음 잠재적 위치에 벽이 없으면, 팩맨의 위치를 갱신한다
+        Item item = (Item) collisionDetector.checkCollision(this, Item.class);
+        if (item != null) {
+            notifyObserverItemEaten(item);
+        }
+
+        // 팩맨의 다음 잠재적 위치에 벽이 없으면, 팩맨의 위치를 갱신한다
+        int currentSpeed = state.getSpeed();
+//        System.out.println(xPos + ", " + yPos);
+        if ((xPos % 4 != 0) || (yPos % 4 != 0)) {
+            currentSpeed = 2;
+        }
+        if (xSpd != 0) {
+            if (xSpd > 0) xSpd = currentSpeed;
+            else xSpd = -currentSpeed;
+        }
+        if (ySpd != 0) {
+            if (ySpd > 0) ySpd = currentSpeed;
+            else ySpd = -currentSpeed;
+        }
+
+
         if (!WallCollisionDetector.checkWallCollision(this, xSpd, ySpd)) {
             updatePosition();
         }
@@ -112,5 +149,27 @@ public class Pacman extends MovingEntity implements Sujet {
     @Override
     public void notifyObserverGhostCollision(Ghost gh) {
         observerCollection.forEach(obs -> obs.updateGhostCollision(gh));
+    }
+
+    @Override
+    public void notifyObserverItemEaten(Item item) {
+        observerCollection.forEach(obs-> obs.updateItemEaten(item));
+    }
+
+    public void switchNormalState() {
+        this.state = normalState;
+        this.spd = state.getSpeed();
+    }
+
+    public void switchSpeedUpState() {
+        speedUpState.resetTimer();
+        this.state = speedUpState;
+        this.spd = state.getSpeed();
+    }
+
+    public void switchPhantomState() {
+        phantomState.resetTimer();
+        this.state = phantomState;
+        this.spd = state.getSpeed();
     }
 }

@@ -3,9 +3,13 @@ package game;
 import game.entities.*;
 import game.entities.ghosts.Blinky;
 import game.entities.ghosts.Ghost;
+import game.entities.items.Item;
+import game.entities.items.Phantom;
+import game.entities.items.SpeedUp;
 import game.ghostFactory.*;
 import game.ghostStates.EatenMode;
 import game.ghostStates.FrightenedMode;
+import game.itemFactory.*;
 import game.utils.CollisionDetector;
 import game.utils.CsvReader;
 import game.utils.KeyHandler;
@@ -14,6 +18,7 @@ import java.awt.*;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 //게임 자체를 관리하는 클래스
 public class Game implements Observer {
@@ -24,6 +29,7 @@ public class Game implements Observer {
 
     private static Pacman pacman;
     private static Blinky blinky;
+    private int pacGumCount = 0;
 
     private static boolean firstInput = false;
 
@@ -40,9 +46,20 @@ public class Game implements Observer {
         int cellsPerRow = data.get(0).size();
         int cellsPerColumn = data.size();
         int cellSize = 8;
+        this.pacGumCount = 0;
 
         CollisionDetector collisionDetector = new CollisionDetector(this);
         AbstractGhostFactory abstractGhostFactory = null;
+        List<AbstractItemFactory> itemfactories = new ArrayList<>();
+        itemfactories.add(new CherryFactory());
+        itemfactories.add(new AppleFactory());
+        itemfactories.add(new WatermelonFactory());
+        itemfactories.add(new PhantomFactory());
+        itemfactories.add(new SpeedUpFactory());
+
+
+        Random random = new Random();
+
 
         //레벨에는 '그리드(격자)'가 있으며, CSV 파일의 각 칸마다 포함된 문자에 따라 그리드의 해당 칸에 특정 엔티티를 표시한다.
         for(int xx = 0 ; xx < cellsPerRow ; xx++) {
@@ -79,7 +96,16 @@ public class Game implements Observer {
                         blinky = (Blinky) ghost;
                     }
                 }else if (dataChar.equals(".")) { //팩검(팩맨 먹이) 생성
-                    objects.add(new PacGum(xx * cellSize, yy * cellSize));
+                    // random하게 Item소환.
+                    if (random.nextDouble() < 0.05) {
+                        int randomIndex = random.nextInt(itemfactories.size());
+                        Item item = itemfactories.get(randomIndex).makeItem(xx * cellSize, yy * cellSize);
+                        objects.add(item);
+                    }
+                    else {
+                        objects.add(new PacGum(xx * cellSize, yy * cellSize));
+                        this.pacGumCount++;
+                    }
                 }else if (dataChar.equals("o")) { //슈퍼팩검 생성
                     objects.add(new SuperPacGum(xx * cellSize, yy * cellSize));
                 }else if (dataChar.equals("-")) { //팩맨 게임에서 유령들이 시작하거나 되돌아오는 ‘유령의 집’ 영역의 벽을 생성
@@ -110,6 +136,12 @@ public class Game implements Observer {
         for (Entity o: objects) {
             if (!o.isDestroyed()) o.update();
         }
+        if (this.pacGumCount <= 0)
+        {
+            // pacMan이 apcGum을 모두 먹었다면,
+            System.out.println("Game over !\nScore : " + GameLauncher.getUIPanel().getScore());
+            System.exit(0); //TODO
+        }
     }
 
     //사용자 입력 관리
@@ -135,6 +167,7 @@ public class Game implements Observer {
     @Override
     public void updatePacGumEaten(PacGum pg) {
         pg.destroy(); //La PacGum est détruite quand Pacman la mange
+        this.pacGumCount--;
     }
 
     @Override
@@ -149,11 +182,29 @@ public class Game implements Observer {
     public void updateGhostCollision(Ghost gh) {
         if (gh.getState() instanceof FrightenedMode) {
             gh.getState().eaten(); //유령이 먹혔을 때 특별한 전환이 존재하면, 그 상태가 그에 맞게 변경된다
-        }else if (!(gh.getState() instanceof EatenMode)) {
+        }
+        else if (!(gh.getState() instanceof EatenMode)) {
             //팩맨이 겁먹지 않았고 먹히지도 않은 유령과 접촉하면 게임 오버!
             System.out.println("Game over !\nScore : " + GameLauncher.getUIPanel().getScore());
             System.exit(0); //TODO
         }
+    }
+
+    // 미완 - 아이템에 따라 Pacman에게 어떤 영향을 줘여함.
+    public void updateItemEaten(Item item) {
+
+        if (item instanceof SpeedUp) {
+            // 이속 2배 증가
+            pacman.switchSpeedUpState();
+            System.out.println("BUFF: Speed UP!");
+        }
+        else if (item instanceof Phantom) {
+            // 무적
+            pacman.switchPhantomState();
+            System.out.println("BUFF: Invincible!");
+        }
+
+        item.destroy();
     }
 
     public static void setFirstInput(boolean b) {
