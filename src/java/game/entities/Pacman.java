@@ -1,8 +1,6 @@
 package game.entities;
 
-import game.Game;
-import game.Observer;
-import game.Sujet;
+import game.*;
 import game.entities.ghosts.Ghost;
 import game.entities.items.Item;
 import game.utils.CollisionDetector;
@@ -15,6 +13,8 @@ import java.util.List;
 
 //팩맨 클래스
 public class Pacman extends MovingEntity implements Sujet {
+    private final float PACGUM_INIT_TIMER = 15f;//팩검 타이머 초기화 상수
+
     private PacmanState state;
 
     protected final PacmanState normalState;
@@ -23,10 +23,12 @@ public class Pacman extends MovingEntity implements Sujet {
 
     private CollisionDetector collisionDetector;
     private List<Observer> observerCollection;
+    private float pacgumSoundTimer;
 
     public Pacman(int xPos, int yPos) {
         super(32, xPos, yPos, 2, "pacman.png", 4, 0.3f);
         observerCollection = new ArrayList<>();
+        pacgumSoundTimer = 0f;
         this.normalState = new NormalState(this);
         this.speedUpState = new SpeedUpState(this);
         this.phantomState = new PhantomState(this);
@@ -120,6 +122,14 @@ public class Pacman extends MovingEntity implements Sujet {
         if (!WallCollisionDetector.checkWallCollision(this, xSpd, ySpd)) {
             updatePosition();
         }
+
+        //팩검 타이머가 0이 되면 팩검 섭취 사운드를 정지시킴.
+        if (pacgumSoundTimer > 0f) {
+            pacgumSoundTimer--;
+            if (pacgumSoundTimer <= 0f) {
+                SoundManager.getInstance().stop(SoundManager.Sound.PAC_DOT);
+            }
+        }
     }
 
     public void setCollisionDetector(CollisionDetector collisionDetector) {
@@ -171,5 +181,20 @@ public class Pacman extends MovingEntity implements Sujet {
         phantomState.resetTimer();
         this.state = phantomState;
         this.spd = state.getSpeed();
+    }
+
+    @Override
+    public void notifyObserverPacmanDead() {
+        observerCollection.forEach(obs -> obs.updatePacmanDead());
+    }
+
+    //팩맨의 팩검 섭취 사운드 출력 관련 타이머를 초기화하는 함수.팩맨이 팩검 섭취 시 옵저버가 이 함수를 실행하도록 해야함.
+    public void initPacgumTimer() {
+        pacgumSoundTimer = PACGUM_INIT_TIMER;
+    }
+
+    //사망
+    public void die() {
+        notifyObserverPacmanDead();
     }
 }

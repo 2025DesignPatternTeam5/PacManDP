@@ -12,4 +12,5 @@ public interface Observer {
     void updateGhostCollision(Ghost gh);
 
     void updateItemEaten(Item item);
+    void updatePacmanDead();
 }

@@ -14,4 +14,5 @@ public interface Sujet {
     void notifyObserverGhostCollision(Ghost gh);
 
     void notifyObserverItemEaten(Item item);
+    void notifyObserverPacmanDead();
 }

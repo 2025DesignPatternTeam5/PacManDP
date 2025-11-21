@@ -6,8 +6,11 @@ import game.entities.ghosts.Ghost;
 import game.entities.items.Item;
 import game.ghostStates.FrightenedMode;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 
 //UI 패널
 public class UIPanel extends JPanel implements Observer {
@@ -16,6 +19,8 @@ public class UIPanel extends JPanel implements Observer {
 
     private int score = 0;
     private JLabel scoreLabel;
+
+    private LifeUIPanel lifePanel;
 
     public UIPanel(int width, int height) {
         this.width = width;
@@ -26,10 +31,16 @@ public class UIPanel extends JPanel implements Observer {
         scoreLabel.setFont(scoreLabel.getFont().deriveFont(20.0F));
         scoreLabel.setForeground(Color.white);
         this.add(scoreLabel, BorderLayout.WEST);
+        lifePanel = new LifeUIPanel(3000);
+    }
+
+    public LifeUIPanel getLifePanel() {
+        return lifePanel;
     }
 
     public void updateScore(int incrScore) {
         this.score += incrScore;
+        this.lifePanel.increaseScore(incrScore);
         this.scoreLabel.setText("Score: " + score);
     }
 
@@ -60,5 +71,10 @@ public class UIPanel extends JPanel implements Observer {
     public void updateItemEaten(Item item) {
         updateScore(item.getPoint());
         // 추가적으로 아이템을 먹었으면 해당 이미지를 panel 하단에 출력하게 하면 좋을 듯.
+    }
+
+    @Override
+    public void updatePacmanDead() {
+        lifePanel.lifeDecrease();
     }
 }
