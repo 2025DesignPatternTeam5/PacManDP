@@ -8,7 +8,7 @@ public class SpeedUpState extends PacmanState {
     private final int DURATION = 60 * 5;
 
     public SpeedUpState(Pacman pacman) {
-        super(pacman);
+        super(pacman, pacman.getSpd() * 2);
     }
 
     @Override
@@ -18,7 +18,7 @@ public class SpeedUpState extends PacmanState {
 
     @Override
     public int getSpeed() {
-        return 4;
+        return this.spd;
     }
 
     @Override

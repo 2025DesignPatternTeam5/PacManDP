@@ -18,7 +18,7 @@ public class PhantomState extends PacmanState {
 
     @Override
     public int getSpeed() {
-        return 2;
+        return this.spd;
     }
 
     @Override

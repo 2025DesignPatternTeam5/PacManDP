@@ -8,10 +8,13 @@ public class NormalState extends PacmanState {
     public NormalState(Pacman pacman) {
         super(pacman);
     }
+    public NormalState(Pacman pacman, int speed) {
+        super(pacman, speed);
+    }
 
     @Override
     public int getSpeed() {
-        return 2;
+        return this.spd;
     }
 
     @Override
