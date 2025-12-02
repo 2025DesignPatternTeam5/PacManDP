@@ -1,5 +1,6 @@
 package game;
 
+import game.gameState.RunningMode;
 import game.utils.KeyHandler;
 
 import javax.imageio.ImageIO;
@@ -79,6 +80,30 @@ public class GameplayPanel extends JPanel implements Runnable {
         g2.dispose();
     }
 
+    public void gameoverScreen(){
+        if (g != null) {
+            g.setColor(Color.BLACK);
+            g.fillRect(0, 0, width, height);
+            String gameOverText = "GAME OVER";
+            g.setColor(Color.YELLOW);
+            Font largeFont = new Font("Arial", Font.BOLD, 72);
+            g.setFont(largeFont);
+            FontMetrics fmLarge = g.getFontMetrics();
+            int xLarge = (width - fmLarge.stringWidth(gameOverText)) / 2;
+            int yLarge = (height / 2) - (fmLarge.getHeight() / 2);
+            g.drawString(gameOverText, xLarge, yLarge);
+            String retryText = "Retry? (Y/N)";
+            g.setColor(Color.WHITE);
+            Font smallFont = new Font("Arial", Font.PLAIN, 24);
+            g.setFont(smallFont);
+            FontMetrics fmSmall = g.getFontMetrics();
+            int ySmall = yLarge + fmLarge.getHeight() + 20;
+            int xSmall = (width - fmSmall.stringWidth(retryText)) / 2;
+
+            g.drawString(retryText, xSmall, ySmall);
+        }
+    }
+
     @Override
     public void run() {
         init();
@@ -112,9 +137,14 @@ public class GameplayPanel extends JPanel implements Runnable {
             if (now - lastUpdateTime > TBU) {
                 lastUpdateTime = now - TBU;
             }
-
-            render();
+            if(game.getGameState() instanceof RunningMode){
+                render();
+            }
+            else {
+//                game.render_screen();
+            }
             draw();
+
             lastRenderTime = now;
             frameCount++;
 

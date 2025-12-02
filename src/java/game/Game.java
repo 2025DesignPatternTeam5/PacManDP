@@ -6,6 +6,10 @@ import game.entities.ghosts.Ghost;
 import game.entities.items.Item;
 import game.entities.items.Phantom;
 import game.entities.items.SpeedUp;
+import game.gameState.GameClearMode;
+import game.gameState.GameOverMode;
+import game.gameState.GameState;
+import game.gameState.RunningMode;
 import game.ghostFactory.*;
 import game.ghostStates.EatenMode;
 import game.ghostStates.FrightenedMode;
@@ -36,9 +40,19 @@ public class Game implements Observer {
     private GhostState state;
     private int level = 2;
 
+    protected GameState gameState;
+
+    protected final GameState running;
+    protected final GameState gameover;
+    protected final GameState gameclear;
+
     public Game(){
         //게임 초기
+        running=new RunningMode(this);
+        gameover=new GameOverMode(this);
+        gameclear=new GameClearMode(this);
 
+        gameState=running;
         //레벨의 CSV파일 불러오기
         List<List<String>> data = null;
         try {
@@ -142,8 +156,10 @@ public class Game implements Observer {
         if (this.pacGumCount <= 0)
         {
             // pacMan이 apcGum을 모두 먹었다면,
-            System.out.println("Game over !\nScore : " + GameLauncher.getUIPanel().getScore());
-            System.exit(0); //TODO
+            System.out.println("Level Clear!!");
+            if(level <3){level++;}
+//            System.out.println("Game over !\nScore : " + GameLauncher.getUIPanel().getScore());
+//            System.exit(0); //TODO
         }
     }
 
@@ -214,6 +230,7 @@ public class Game implements Observer {
     @Override
     public void updatePacmanDead() {
         //여기에다가 팩맨 죽었을 때 게임 다시 초기화하는 로직 작성할 것
+
     }
 
     public static void setFirstInput(boolean b) {
@@ -223,4 +240,16 @@ public class Game implements Observer {
     public static boolean getFirstInput() {
         return firstInput;
     }
+
+    public void switchGameOver() {
+        gameState=gameover;
+    }
+    public void switchGameClear(){
+        level++;
+        gameState=gameclear;
+    }
+    public void switchRunning(){
+        gameState=running;
+    }
+    public GameState getGameState() {return gameState;}
 }
