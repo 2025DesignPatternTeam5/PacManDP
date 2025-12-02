@@ -1,5 +1,7 @@
 package game;
 
+import game.gameState.GameOverMode;
+import game.gameState.GameState;
 import game.gameState.RunningMode;
 import game.utils.KeyHandler;
 
@@ -103,6 +105,29 @@ public class GameplayPanel extends JPanel implements Runnable {
             g.drawString(retryText, xSmall, ySmall);
         }
     }
+    public void gameclearScreen(){
+        if (g != null) {
+            g.setColor(Color.BLACK);
+            g.fillRect(0, 0, width, height);
+            String gameOverText = "LEVEL CLEAR!";
+            g.setColor(Color.YELLOW);
+            Font largeFont = new Font("Arial", Font.BOLD, 72);
+            g.setFont(largeFont);
+            FontMetrics fmLarge = g.getFontMetrics();
+            int xLarge = (width - fmLarge.stringWidth(gameOverText)) / 2;
+            int yLarge = (height / 2) - (fmLarge.getHeight() / 2);
+            g.drawString(gameOverText, xLarge, yLarge);
+            String retryText = "Next level? (Y/N)";
+            g.setColor(Color.WHITE);
+            Font smallFont = new Font("Arial", Font.PLAIN, 24);
+            g.setFont(smallFont);
+            FontMetrics fmSmall = g.getFontMetrics();
+            int ySmall = yLarge + fmLarge.getHeight() + 20;
+            int xSmall = (width - fmSmall.stringWidth(retryText)) / 2;
+
+            g.drawString(retryText, xSmall, ySmall);
+        }
+    }
 
     @Override
     public void run() {
@@ -140,8 +165,11 @@ public class GameplayPanel extends JPanel implements Runnable {
             if(game.getGameState() instanceof RunningMode){
                 render();
             }
-            else {
-//                game.render_screen();
+            else if(game.getGameState() instanceof GameOverMode){
+                gameoverScreen();
+            }
+            else{
+                gameclearScreen();
             }
             draw();
 
