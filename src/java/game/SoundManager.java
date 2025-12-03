@@ -32,6 +32,7 @@ public class SoundManager {
 
     //특정 사운드 재생
     public void play(Sound sound) {
+        stop(sound);
         soundMap.get(sound).start();
     }
 
