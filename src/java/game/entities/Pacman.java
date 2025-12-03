@@ -202,6 +202,7 @@ public class Pacman extends MovingEntity implements Sujet {
     public void die() {
         isDead = true;
         SoundManager.getInstance().stop(SoundManager.Sound.PAC_DOT);
+        SoundManager.getInstance().play(SoundManager.Sound.FAIL);
         notifyObserverPacmanDead();
     }
 }
