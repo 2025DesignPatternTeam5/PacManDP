@@ -186,4 +186,8 @@ public abstract class Ghost extends MovingEntity {
             g.drawImage(sprite.getSubimage((int)subimage * size + direction * size * nbSubimagesPerCycle, 0, size, size), this.xPos, this.yPos,null);
         }
     }
+
+    //위 두 함수는 Test 용도로만 써야한다. 외부에서 이 변수를 쓸 일이 없도록 한다.
+    public static int getFrightenedCnt() { return frightenedCnt;}
+    public static int getEatenCnt() { return eatenCnt;}
 }

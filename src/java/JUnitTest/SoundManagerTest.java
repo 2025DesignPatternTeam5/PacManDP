@@ -6,8 +6,6 @@ import org.junit.jupiter.api.Test;
 
 import javax.sound.sampled.Clip;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 class SoundManagerTest {
 
     @Test
