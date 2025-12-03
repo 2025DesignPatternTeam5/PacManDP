@@ -63,7 +63,6 @@ public class Game implements Observer {
 
         Random random = new Random();
 
-
         //레벨에는 '그리드(격자)'가 있으며, CSV 파일의 각 칸마다 포함된 문자에 따라 그리드의 해당 칸에 특정 엔티티를 표시한다.
         for(int xx = 0 ; xx < cellsPerRow ; xx++) {
             for(int yy = 0 ; yy < cellsPerColumn ; yy++) {
