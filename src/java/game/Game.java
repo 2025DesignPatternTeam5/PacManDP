@@ -213,6 +213,8 @@ public class Game implements Observer {
     @Override
     public void updatePacmanDead() {
         //여기에다가 팩맨 죽었을 때 게임 다시 초기화하는 로직 작성할 것
+        //모든 유령들의 움직임을 멈추거나, 아니면 그냥 다 destroy할 것
+        SoundManager.getInstance().play(SoundManager.Sound.FAIL);
     }
 
     public static void setFirstInput(boolean b) {
