@@ -196,7 +196,7 @@ public class Game implements Observer {
 
     // 미완 - 아이템에 따라 Pacman에게 어떤 영향을 줘여함.
     public void updateItemEaten(Item item) {
-
+        SoundManager.getInstance().play(SoundManager.Sound.PAC_FRUIT);
         if (item instanceof SpeedUp) {
             // 이속 2배 증가
             pacman.switchSpeedUpState();
