@@ -5,10 +5,10 @@ import game.Game;
 public class GameClearMode extends GameState {
     public GameClearMode(Game game) {super(game);}
 
-    public void retry(){
+    public void retryGame(){
         game.switchRunning();
     }
-    public void exit(){
+    public void exitGame(){
         System.exit(0);
     }
 }

@@ -167,9 +167,25 @@ public class GameplayPanel extends JPanel implements Runnable {
             }
             else if(game.getGameState() instanceof GameOverMode){
                 gameoverScreen();
+                if (key.k_y.isPressed) {
+                    init();
+                    game.getGameState().retryGame();
+                }
+                // 'N' 입력: 게임 종료 (Exit)
+                else if (key.k_n.isPressed) {
+                    game.getGameState().exitGame();
+                }
             }
             else{
                 gameclearScreen();
+                if (key.k_y.isPressed) {
+                    init();
+                    game.getGameState().retryGame();
+                }
+                // 'N' 입력: 게임 종료 (Exit)
+                else if (key.k_n.isPressed) {
+                    game.getGameState().exitGame();
+                }
             }
             draw();
 
