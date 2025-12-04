@@ -5,13 +5,10 @@ import game.entities.ghosts.Blinky;
 import game.entities.ghosts.Ghost;
 import game.entities.items.EffectItem;
 import game.entities.items.Item;
-import game.entities.items.Phantom;
-import game.entities.items.SpeedUp;
 import game.ghostFactory.*;
 import game.ghostStates.EatenMode;
 import game.ghostStates.FrightenedMode;
 import game.itemFactory.*;
-import game.pacmanEffect.EffectCommand;
 import game.utils.CollisionDetector;
 import game.utils.CsvReader;
 import game.utils.KeyHandler;
@@ -56,8 +53,9 @@ public class Game implements Observer {
         itemfactories.add(new CherryFactory());
         itemfactories.add(new AppleFactory());
         itemfactories.add(new WatermelonFactory());
-//        itemfactories.add(new PhantomFactory());
-        itemfactories.add(new SpeedUpFactory());
+        itemfactories.add(new BananaFactory()); // speed down
+        itemfactories.add(new SpeedUpFactory()); // speed up
+        itemfactories.add(new ShieldFactory()); // invulnerable
 
 
         Random random = new Random();
@@ -185,7 +183,7 @@ public class Game implements Observer {
         if (gh.getState() instanceof FrightenedMode) {
             gh.getState().eaten(); //유령이 먹혔을 때 특별한 전환이 존재하면, 그 상태가 그에 맞게 변경된다
         }
-        else if (!(gh.getState() instanceof EatenMode)) {
+        else if (!(gh.getState() instanceof EatenMode) && !pacman.getInvulnerable()) {
             //팩맨이 겁먹지 않았고 먹히지도 않은 유령과 접촉하면 게임 오버!
             System.out.println("Game over !\nScore : " + GameLauncher.getUIPanel().getScore());
             System.exit(0); //TODO
