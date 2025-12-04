@@ -8,6 +8,7 @@ import game.entities.items.Item;
 import game.ghostFactory.*;
 import game.ghostStates.EatenMode;
 import game.ghostStates.FrightenedMode;
+import game.ghostStates.GhostState;
 import game.itemFactory.*;
 import game.pacmanEffect.EffectCommand;
 import game.utils.CollisionDetector;

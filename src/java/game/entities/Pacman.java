@@ -18,8 +18,6 @@ import java.util.List;
 public class Pacman extends MovingEntity implements Sujet {
     private final float PACGUM_INIT_TIMER = 15f;//팩검 타이머 초기화 상수
 
-    private PacmanState state;
-
     private CollisionDetector collisionDetector;
     private List<Observer> observerCollection;
     private List<EffectCommand> activeEffects; // 아이템으로 인한 상태 관리
