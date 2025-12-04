@@ -2,24 +2,22 @@ package game.pacmanEffect;
 
 import game.entities.MovingEntity;
 
-import static java.lang.Math.max;
-
-public class InvulnerableEffect extends EffectCommand {
-    public InvulnerableEffect(long duration) {
+public class ConfuseEffect extends EffectCommand{
+    public ConfuseEffect(long duration) {
         super(duration);
     }
 
     @Override
     public void apply(MovingEntity movingEntity) {
-        // 무적 추기
-        movingEntity.setInvulnerable(true);
+        // 방향 반전
+        movingEntity.setConfuse(true);
         System.out.println(this.getClass().getSimpleName() + " apply. (Effect: " + this.getClass().getSimpleName() + ")");
     }
 
     @Override
     public void remove(MovingEntity movingEntity) {
-        // 무적 취소
-        movingEntity.setInvulnerable(false);
+        // 방향 반전 취소
+        movingEntity.setConfuse(false);
         System.out.println(this.getClass().getSimpleName() + " remove.");
     }
 }

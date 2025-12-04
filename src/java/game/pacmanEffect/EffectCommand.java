@@ -1,6 +1,6 @@
 package game.pacmanEffect;
 
-import game.entities.Pacman;
+import game.entities.MovingEntity;
 
 public abstract class EffectCommand {
     protected long timer;
@@ -12,10 +12,10 @@ public abstract class EffectCommand {
     }
 
     // 효과 적용 시점 (최초 1회)
-    public abstract void apply(Pacman pacman);
+    public abstract void apply(MovingEntity movingEntity);
 
     // 효과 종료 시점 (원상 복구)
-    public abstract void remove(Pacman pacman);
+    public abstract void remove(MovingEntity movingEntity);
 
     // 중복 아이템 획득 시 타이머 초기화
     public void resetTimer() {

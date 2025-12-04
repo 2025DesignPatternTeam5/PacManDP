@@ -33,21 +33,37 @@ public class Pacman extends MovingEntity implements Sujet {
     public void input(KeyHandler k) {
         int new_xSpd = 0;
         int new_ySpd = 0;
+        boolean inLeft = k.k_left.isPressed;
+        boolean inRight = k.k_right.isPressed;
+        boolean inUp = k.k_up.isPressed;
+        boolean inDown = k.k_down.isPressed;
 
         if (!onTheGrid()) return; //팩맨은 게임 구역의 한 칸(cell)에 있어야 한다
         if (!onGameplayWindow()) return; //팩맨은 게임 구역 안에 있어야 한다
 
+        // 혼란 상태: 키 반전 (왼쪽 키 -> 오른쪽 이동, 위쪽 키 -> 아래 이동)
+        if (this.confuse) {
+           boolean temp = inLeft;
+           inLeft = inRight;
+           inRight = temp;
+
+           temp = inDown;
+           inDown = inUp;
+           inUp = temp;
+        }
+
+
         //누른 키에 따라 팩맨의 방향이 그에 맞게 바뀐다
-        if (k.k_left.isPressed && xSpd >= 0 && !WallCollisionDetector.checkWallCollision(this, -spd, 0)) {
+        if (inLeft && xSpd >= 0 && !WallCollisionDetector.checkWallCollision(this, -spd, 0)) {
             new_xSpd = -spd;
         }
-        if (k.k_right.isPressed && xSpd <= 0 && !WallCollisionDetector.checkWallCollision(this, spd, 0)) {
+        if (inRight && xSpd <= 0 && !WallCollisionDetector.checkWallCollision(this, spd, 0)) {
             new_xSpd = spd;
         }
-        if (k.k_up.isPressed && ySpd >= 0 && !WallCollisionDetector.checkWallCollision(this, 0, -spd)) {
+        if (inUp && ySpd >= 0 && !WallCollisionDetector.checkWallCollision(this, 0, -spd)) {
             new_ySpd = -spd;
         }
-        if (k.k_down.isPressed && ySpd <= 0 && !WallCollisionDetector.checkWallCollision(this, 0, spd)) {
+        if (inDown && ySpd <= 0 && !WallCollisionDetector.checkWallCollision(this, 0, spd)) {
             new_ySpd = spd;
         }
 
@@ -167,9 +183,5 @@ public class Pacman extends MovingEntity implements Sujet {
     @Override
     public void notifyObserverItemEaten(Item item) {
         observerCollection.forEach(obs-> obs.updateItemEaten(item));
-    }
-
-    public void setSpd(int spd) {
-        this.spd = spd;
     }
 }

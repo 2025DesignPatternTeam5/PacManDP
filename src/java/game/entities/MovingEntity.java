@@ -17,6 +17,7 @@ public abstract class MovingEntity extends Entity {
     protected int direction = 0;
     protected float imageSpd = 0.2f;
     protected boolean invulnerable = false;
+    protected boolean confuse = false;
 
     public MovingEntity(int size, int xPos, int yPos, int spd, String spriteName, int nbSubimagesPerCycle, float imageSpd) {
         super(size, xPos, yPos);
@@ -156,12 +157,24 @@ public abstract class MovingEntity extends Entity {
         return spd;
     }
 
+    public void setSpd(int spd) {
+        this.spd = spd;
+    }
+
     public void setInvulnerable(boolean invulnerable) {
         this.invulnerable = invulnerable;
     }
 
     public boolean getInvulnerable() {
         return invulnerable;
+    }
+
+    public void setConfuse(boolean confuse) {
+        this.confuse = confuse;
+    }
+
+    public boolean getConfuse() {
+        return confuse;
     }
 
 

@@ -1,6 +1,6 @@
 package game.pacmanEffect;
 
-import game.entities.Pacman;
+import game.entities.MovingEntity;
 
 import static java.lang.Math.max;
 
@@ -11,16 +11,16 @@ public class SpeedDownEffect extends EffectCommand {
     }
 
     @Override
-    public void apply(Pacman pacman) {
+    public void apply(MovingEntity movingEntity) {
         // 현재 속도에 부스트를 더함
-        pacman.setSpd(pacman.getSpd() + speedBoost);
-        System.out.println(this.getClass().getSimpleName() + " apply. (Speed: " + pacman.getSpd() + ")");
+        movingEntity.setSpd(movingEntity.getSpd() + speedBoost);
+        System.out.println(this.getClass().getSimpleName() + " apply. (Speed: " + movingEntity.getSpd() + ")");
     }
 
     @Override
-    public void remove(Pacman pacman) {
+    public void remove(MovingEntity movingEntity) {
         // 속도 원상 복구
-        pacman.setSpd(max(pacman.getSpd() - speedBoost, 0));
-        System.out.println(this.getClass().getSimpleName() + " remove. (Speed: " + pacman.getSpd() + ")");
+        movingEntity.setSpd(max(movingEntity.getSpd() - speedBoost, 0));
+        System.out.println(this.getClass().getSimpleName() + " remove. (Speed: " + movingEntity.getSpd() + ")");
     }
 }

@@ -56,6 +56,7 @@ public class Game implements Observer {
         itemfactories.add(new BananaFactory()); // speed down
         itemfactories.add(new SpeedUpFactory()); // speed up
         itemfactories.add(new ShieldFactory()); // invulnerable
+        itemfactories.add(new DemonFactory()); // direction reversal
 
 
         Random random = new Random();
