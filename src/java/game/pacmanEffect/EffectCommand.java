@@ -2,13 +2,32 @@ package game.pacmanEffect;
 
 import game.entities.MovingEntity;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+
+import static java.lang.Math.max;
+
 public abstract class EffectCommand {
+    protected BufferedImage effectImage;
     protected long timer;
     protected long duration; // 지속 시간 (ms)
 
-    public EffectCommand(long duration) {
-        this.duration = duration * 60;
+//    public EffectCommand(long duration) {
+//        this.duration = max(duration * 60, 1);
+//        this.timer = 0;
+//        effectImage = null;
+//    }
+
+    public EffectCommand(long duration, String imageName) {
+        this.duration = max(duration * 60, 1);
         this.timer = 0;
+        try {
+            this.effectImage = ImageIO.read(getClass().getClassLoader().getResource("img/effects/" + imageName));
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     // 효과 적용 시점 (최초 1회)
@@ -28,8 +47,17 @@ public abstract class EffectCommand {
     }
 
     public boolean isExpired() {
-        return timer >= duration;}
+        return timer >= duration;
+    }
 
+    public float getDurationRatio() {
+        // 예: timer=150, duration=300 이면 -> 1.0 - 0.5 = 0.5 (절반 남음)
+        return 1.0f - ((float)this.timer / (float)this.duration);
+    }
+
+    public BufferedImage getEffectImage() {
+        return effectImage;
+    }
 }
 
 

@@ -9,6 +9,7 @@ import game.ghostFactory.*;
 import game.ghostStates.EatenMode;
 import game.ghostStates.FrightenedMode;
 import game.itemFactory.*;
+import game.pacmanEffect.EffectCommand;
 import game.utils.CollisionDetector;
 import game.utils.CsvReader;
 import game.utils.KeyHandler;
@@ -189,6 +190,18 @@ public class Game implements Observer {
             System.out.println("Game over !\nScore : " + GameLauncher.getUIPanel().getScore());
             System.exit(0); //TODO
         }
+    }
+
+    @Override
+    public void updateEffectAdded(EffectCommand effect) {
+    }
+
+    @Override
+    public void updateEffectRemoved(EffectCommand effect) {
+    }
+
+    @Override
+    public void updateEffectTick(EffectCommand effect) {
     }
 
     public void updateItemEaten(Item item) {

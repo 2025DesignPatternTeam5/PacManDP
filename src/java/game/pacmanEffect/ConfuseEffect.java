@@ -4,7 +4,7 @@ import game.entities.MovingEntity;
 
 public class ConfuseEffect extends EffectCommand{
     public ConfuseEffect(long duration) {
-        super(duration);
+        super(duration, "confuseEffect.png");
     }
 
     @Override

@@ -2,11 +2,9 @@ package game.pacmanEffect;
 
 import game.entities.MovingEntity;
 
-import static java.lang.Math.max;
-
 public class InvulnerableEffect extends EffectCommand {
     public InvulnerableEffect(long duration) {
-        super(duration);
+        super(duration, "invulnerableEffect.png");
     }
 
     @Override

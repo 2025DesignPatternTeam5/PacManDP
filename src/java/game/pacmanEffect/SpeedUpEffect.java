@@ -7,7 +7,7 @@ import static java.lang.Math.max;
 public class SpeedUpEffect extends EffectCommand {
     private final int speedBoost = 1;
     public SpeedUpEffect(long duration) {
-        super(duration);
+        super(duration, "speedUpEffect.png");
     }
 
     @Override

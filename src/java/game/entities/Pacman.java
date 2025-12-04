@@ -105,6 +105,7 @@ public class Pacman extends MovingEntity implements Sujet {
         // 새로운 효과면 적용 및 리스트 추가
         newEffect.apply(this);
         activeEffects.add(newEffect);
+        notifyObserverEffectAdded(newEffect);
     }
 
     @Override
@@ -114,11 +115,12 @@ public class Pacman extends MovingEntity implements Sujet {
         while (iterator.hasNext()) {
             EffectCommand effect = iterator.next();
             effect.update(); // timer++
-
             if (effect.isExpired()) {
                 effect.remove(this); // 스탯 원상복구
                 iterator.remove();   // 리스트에서 삭제
+                notifyObserverEffectRemoved(effect);
             }
+            else notifyObserverEffectTick(effect);
         }
 
         //팩맨이 PacGum, SuperPacGum 또는 유령과 접촉했는지 매번 확인하고, 그에 따라 옵저버들에게 알림을 보낸다
@@ -183,5 +185,20 @@ public class Pacman extends MovingEntity implements Sujet {
     @Override
     public void notifyObserverItemEaten(Item item) {
         observerCollection.forEach(obs-> obs.updateItemEaten(item));
+    }
+
+    @Override
+    public void notifyObserverEffectAdded(EffectCommand newEffect) {
+        observerCollection.forEach(obs-> obs.updateEffectAdded(newEffect));
+    }
+
+    @Override
+    public void notifyObserverEffectRemoved(EffectCommand newEffect) {
+        observerCollection.forEach(obs -> obs.updateEffectRemoved(newEffect));
+    }
+
+    @Override
+    public void notifyObserverEffectTick(EffectCommand effect) {
+        observerCollection.forEach(obs -> obs.updateEffectTick(effect));
     }
 }
