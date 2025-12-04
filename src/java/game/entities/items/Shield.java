@@ -1,6 +1,9 @@
 package game.entities.items;
 
 
-// speed up 30%
-public class Shield {
-}
+
+//public class Shield extends EffectItem{
+//    public Shield(int xPos, int yPos) {
+//        super(xPos, yPos, "phantom.png", );
+//    }
+//}

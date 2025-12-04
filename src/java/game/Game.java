@@ -3,6 +3,7 @@ package game;
 import game.entities.*;
 import game.entities.ghosts.Blinky;
 import game.entities.ghosts.Ghost;
+import game.entities.items.EffectItem;
 import game.entities.items.Item;
 import game.entities.items.Phantom;
 import game.entities.items.SpeedUp;
@@ -10,6 +11,7 @@ import game.ghostFactory.*;
 import game.ghostStates.EatenMode;
 import game.ghostStates.FrightenedMode;
 import game.itemFactory.*;
+import game.pacmanEffect.EffectCommand;
 import game.utils.CollisionDetector;
 import game.utils.CsvReader;
 import game.utils.KeyHandler;
@@ -54,7 +56,7 @@ public class Game implements Observer {
         itemfactories.add(new CherryFactory());
         itemfactories.add(new AppleFactory());
         itemfactories.add(new WatermelonFactory());
-        itemfactories.add(new PhantomFactory());
+//        itemfactories.add(new PhantomFactory());
         itemfactories.add(new SpeedUpFactory());
 
 
@@ -190,20 +192,11 @@ public class Game implements Observer {
         }
     }
 
-    // 미완 - 아이템에 따라 Pacman에게 어떤 영향을 줘여함.
     public void updateItemEaten(Item item) {
 
-        if (item instanceof SpeedUp) {
-            // 이속 2배 증가
-            pacman.switchSpeedUpState();
-            System.out.println("BUFF: Speed UP!");
+        if (item instanceof EffectItem) {
+            pacman.addEffect(((EffectItem) item).getEffectCommand());
         }
-        else if (item instanceof Phantom) {
-            // 무적
-            pacman.switchPhantomState();
-            System.out.println("BUFF: Invincible!");
-        }
-
         item.destroy();
     }
 

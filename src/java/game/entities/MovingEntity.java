@@ -154,4 +154,33 @@ public abstract class MovingEntity extends Entity {
     public int getSpd() {
         return spd;
     }
+
+
+    // x, y 속도 갱신. map의 cellsize가 8단위 이므로 8에는 무조건 갈 수 있도록 함.
+    public void updatexySpd() {
+        if (xSpd != 0) {
+            if (xSpd > 0) {
+                xSpd = this.spd;
+                if (xPos % 8 > (xPos + xSpd) % 8)
+                    xSpd = xSpd - (xPos + xSpd) % 8;
+            }
+            else {
+                xSpd = -this.spd;
+                if (xPos % 8 != 0 && xPos % 8 < (xPos + xSpd) % 8)
+                    xSpd = xSpd + 8 - (xPos + xSpd) % 8;
+            }
+        }
+        if (ySpd != 0) {
+            if (ySpd > 0) {
+                ySpd = this.spd;
+                if (yPos % 8 > (yPos + ySpd) % 8)
+                    ySpd = ySpd - (yPos + ySpd) % 8;
+            }
+            else {
+                ySpd = -this.spd;
+                if (yPos % 8 != 0 && yPos % 8 < (yPos + ySpd) % 8)
+                    ySpd = ySpd + 8 - (yPos + ySpd) % 8;
+            }
+        }
+    }
 }
