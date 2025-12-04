@@ -1,6 +1,7 @@
 package game.entities.ghosts;
 
 import game.Game;
+import game.SoundManager;
 import game.entities.MovingEntity;
 import game.ghostStates.*;
 import game.ghostStrategies.IGhostStrategy;
@@ -19,6 +20,7 @@ public abstract class Ghost extends MovingEntity {
     protected final GhostState frightenedMode;
     protected final GhostState eatenMode;
     protected final GhostState houseMode;
+    protected final GhostState stayMode;
 
     protected int modeTimer = 0;
     protected int frightenedTimer = 0;
@@ -30,6 +32,10 @@ public abstract class Ghost extends MovingEntity {
 
     protected IGhostStrategy strategy;
 
+    private static int normalCnt; //일반 상태의 유령 개수
+    private static int frightenedCnt;//공포 상태의 유령 개수 (먹힌 상태의 유령도 포함됨)
+    private static int eatenCnt; //먹힌 상태의 유령 개수
+
     public Ghost(int xPos, int yPos, String spriteName) {
         super(32, xPos, yPos, 2, spriteName, 2, 0.1f);
 
@@ -39,8 +45,13 @@ public abstract class Ghost extends MovingEntity {
         frightenedMode = new FrightenedMode(this);
         eatenMode = new EatenMode(this);
         houseMode = new HouseMode(this);
+        stayMode = new StayMode(this);
 
-        state = houseMode; //état initial
+        state = stayMode; //état initial
+
+        normalCnt = 4;
+        frightenedCnt = 0;
+        eatenCnt = 0;
 
         try {
             frightenedSprite1 = ImageIO.read(getClass().getClassLoader().getResource("img/ghost_frightened.png"));
@@ -53,22 +64,40 @@ public abstract class Ghost extends MovingEntity {
 
     //Méthodes pour les transitions entre les différents états
     public void switchChaseMode() {
+        modeTimer = 0;
         state = chaseMode;
     }
     public void switchScatterMode() {
+        modeTimer = 0;
         state = scatterMode;
     }
 
     public void switchFrightenedMode() {
+        normalCnt--;
+        frightenedCnt++;
         frightenedTimer = 0;
+        SoundManager.getInstance().stop(SoundManager.Sound.GHOST_NORMAL);
+        SoundManager.getInstance().playLoop(SoundManager.Sound.GHOST_FRIGHTENED);
         state = frightenedMode;
     }
 
     public void switchEatenMode() {
+        eatenCnt++;
+        SoundManager.getInstance().stop(SoundManager.Sound.GHOST_FRIGHTENED);
+        SoundManager.getInstance().playLoop(SoundManager.Sound.GHOST_EATEN);
         state = eatenMode;
     }
 
     public void switchHouseMode() {
+        eatenCnt--;
+        if (eatenCnt == 0) { //다른 먹힌 상태의 유령이 존재하는 경우에만 다른 사운드로 교체한다
+            SoundManager.getInstance().stop(SoundManager.Sound.GHOST_EATEN);
+            if (frightenedCnt - 1 == 0) {//공포 상태 유령이 없으면 (본인은 제외) 일반 사운드를 재생한다
+                SoundManager.getInstance().playLoop(SoundManager.Sound.GHOST_NORMAL);
+            } else { //공포 상태 유령이 존재하는 경우 공포 사운드를 재생한다
+                SoundManager.getInstance().playLoop(SoundManager.Sound.GHOST_FRIGHTENED);
+            }
+        }
         state = houseMode;
     }
 
@@ -77,6 +106,16 @@ public abstract class Ghost extends MovingEntity {
             switchChaseMode();
         }else{
             switchScatterMode();
+        }
+
+        if(normalCnt == 4) //처음 시작할 때인 경우 아래의 코드를 실행할 필요X
+            return;
+
+        frightenedCnt--;
+        normalCnt++;
+        if (frightenedCnt == 0) { //공포 상태의 유령이 없으므로 일반 사운드 재생
+            SoundManager.getInstance().stop(SoundManager.Sound.GHOST_FRIGHTENED);
+            SoundManager.getInstance().playLoop(SoundManager.Sound.GHOST_NORMAL);
         }
     }
 

@@ -14,6 +14,7 @@ public interface Sujet {
     void notifyObserverSuperPacGumEaten(SuperPacGum spg);
     void notifyObserverGhostCollision(Ghost gh);
     void notifyObserverItemEaten(Item item);
+    void notifyObserverPacmanDead();
     void notifyObserverEffectAdded(EffectCommand newEffect);
     void notifyObserverEffectRemoved(EffectCommand newEffect);
     void notifyObserverEffectTick(EffectCommand effect);

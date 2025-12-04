@@ -42,4 +42,8 @@ public abstract class Item extends StaticEntity {
     public int getPoint() {
         return this.point;
     }
+
+    public BufferedImage getImage() { // just for test
+        return this.sprite;
+    }
 }

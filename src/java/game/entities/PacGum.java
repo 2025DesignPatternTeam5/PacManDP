@@ -1,5 +1,7 @@
 package game.entities;
 
+import game.SoundManager;
+
 import java.awt.*;
 
 //Classe pour les PacGums
@@ -12,5 +14,11 @@ public class PacGum extends StaticEntity {
     public void render(Graphics2D g) {
         g.setColor(new Color(255, 183, 174));
         g.fillRect(xPos, yPos, size, size);
+    }
+
+    @Override
+    public void destroy() {
+        SoundManager.getInstance().playLoop(SoundManager.Sound.PAC_DOT);
+        super.destroy();
     }
 }

@@ -12,6 +12,7 @@ public interface Observer {
     void updateSuperPacGumEaten(SuperPacGum spg);
     void updateGhostCollision(Ghost gh);
     void updateItemEaten(Item item);
+    void updatePacmanDead();
     void updateEffectAdded(EffectCommand effect);
     void updateEffectRemoved(EffectCommand effect);
     void updateEffectTick(EffectCommand effect);

@@ -12,9 +12,7 @@ public class EatenMode extends GhostState{
 
     //Transition lorsque le fantôme retourne dans sa maison
     @Override
-    public void insideHouse() {
-        ghost.switchHouseMode();
-    }
+    public void insideHouse() {ghost.switchHouseMode();}
 
     //Dans cet état, la position ciblée est une case au milieu de la maison des fantômes
     @Override

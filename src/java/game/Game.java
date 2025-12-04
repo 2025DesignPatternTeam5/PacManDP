@@ -32,6 +32,8 @@ public class Game implements Observer {
     private int pacGumCount = 0;
 
     private static boolean firstInput = false;
+    private GhostState state;
+    private int level = 2;
 
     public Game(){
         //게임 초기
@@ -92,7 +94,7 @@ public class Game implements Observer {
                             break;
                     }
 
-                    Ghost ghost = abstractGhostFactory.makeGhost(xx * cellSize, yy * cellSize);
+                    Ghost ghost = abstractGhostFactory.makeGhost(xx * cellSize, yy * cellSize, level);
                     ghosts.add(ghost);
                     if (dataChar.equals("b")) {
                         blinky = (Blinky) ghost;
@@ -168,6 +170,7 @@ public class Game implements Observer {
     //팩맨이 PacGum, SuperPacGum 또는 유령과 접촉(충돌?)할 때 게임이 알림을 받는다
     @Override
     public void updatePacGumEaten(PacGum pg) {
+        pacman.initPacgumTimer();
         pg.destroy(); //La PacGum est détruite quand Pacman la mange
         this.pacGumCount--;
     }
@@ -188,7 +191,7 @@ public class Game implements Observer {
         else if (!(gh.getState() instanceof EatenMode) && !pacman.getInvulnerable()) {
             //팩맨이 겁먹지 않았고 먹히지도 않은 유령과 접촉하면 게임 오버!
             System.out.println("Game over !\nScore : " + GameLauncher.getUIPanel().getScore());
-            System.exit(0); //TODO
+            pacman.die();//팩맨 사망
         }
     }
 
@@ -210,6 +213,11 @@ public class Game implements Observer {
             pacman.addEffect(((EffectItem) item).getEffectCommand());
         }
         item.destroy();
+    }
+
+    @Override
+    public void updatePacmanDead() {
+        //여기에다가 팩맨 죽었을 때 게임 다시 초기화하는 로직 작성할 것
     }
 
     public static void setFirstInput(boolean b) {

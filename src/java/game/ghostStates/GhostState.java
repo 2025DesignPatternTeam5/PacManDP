@@ -19,7 +19,7 @@ public abstract class GhostState {
     public void eaten() {}
     public void outsideHouse() {}
     public void insideHouse() {}
-
+    public void lvlGhost(int level) {}
     public int[] getTargetPosition(){
         return new int[2];
     } //retourne le point que va cibler le fantôme
