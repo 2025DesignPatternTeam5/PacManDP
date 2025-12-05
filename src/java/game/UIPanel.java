@@ -1,6 +1,7 @@
 package game;
 
 import game.entities.PacGum;
+import game.entities.Pacman;
 import game.entities.SuperPacGum;
 import game.entities.ghosts.Ghost;
 import game.entities.items.Item;
@@ -110,4 +111,6 @@ public class UIPanel extends JPanel implements Observer {
     public void updateEffectTick(EffectCommand effect) {
         buffPanel.repaint();
     }
+
+    public void setPacman(Pacman pacman) {lifePanel.setPacman(pacman);}
 }

@@ -1,22 +1,22 @@
 package game;
 
+import game.entities.Pacman;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public class LifeUIPanel extends JPanel {
-    private int lives;
     private int tempScore; //획득한 점수 버퍼
     private final int unitScore; //라이프가 오르는 기준 점수값
-
+    private Pacman pacman;
     private final Image pacmanImage;
     private BufferedImage buffer; // 캐싱된 이미지
     private boolean dirty = true; // 다시 그릴 필요가 있는가?
 
     public LifeUIPanel(int unitScore) {
         this.pacmanImage = loadImage("img/life.png");
-        this.lives = 5;
         this.tempScore = 0;
         this.unitScore = unitScore;
         this.setBackground(Color.black);
@@ -44,19 +44,15 @@ public class LifeUIPanel extends JPanel {
     private void lifeIncrease() {
         while(tempScore >= unitScore) {
             tempScore -= unitScore;
-            lives++;
+            pacman.increaseLifeCnt();
             setLifeUI();
         }
     }
 
     //라이프 감소
     public void lifeDecrease() {
-        lives--;
-        System.out.println("life : " + lives);
+        pacman.decreaseLifeCnt();
         setLifeUI();
-        if(lives == 0) {
-            System.out.println("게임 종료");
-        }
     }
 
      private void createBuffer() {
@@ -77,11 +73,11 @@ public class LifeUIPanel extends JPanel {
         g.setComposite(AlphaComposite.SrcOver);
 
         int x = 0;
-        for (int i = 0; i < lives; i++) {
+        int lifeCnt = pacman == null ? 5 : pacman.getLifeCnt();
+        for (int i = 0; i < lifeCnt; i++) {
             g.drawImage(pacmanImage, x, 0, null);
             x += pacmanImage.getWidth(null) + 5;
         }
-
         g.dispose();
         dirty = false;
     }
@@ -97,4 +93,6 @@ public class LifeUIPanel extends JPanel {
 
         g.drawImage(buffer, 0, 5, null);
     }
+
+    public void setPacman(Pacman pacman) { this.pacman = pacman; }
 }
