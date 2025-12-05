@@ -1,8 +1,10 @@
 package game.entities.items;
 
-// speed x2
-public class SpeedUp extends Item {
+import game.pacmanEffect.SpeedUpEffect;
+
+// speed + 1; 5s
+public class SpeedUp extends EffectItem {
     public SpeedUp(int xPos, int yPos) {
-        super(xPos, yPos, "speedup.png");
+        super(xPos, yPos, "speedup.png", new SpeedUpEffect(5));
     }
 }

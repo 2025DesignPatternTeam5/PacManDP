@@ -5,14 +5,11 @@ import game.entities.SuperPacGum;
 import game.entities.ghosts.Ghost;
 import game.entities.items.Item;
 import game.ghostStates.FrightenedMode;
+import game.pacmanEffect.EffectCommand;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
 
-//UI 패널
 public class UIPanel extends JPanel implements Observer {
     public static int width;
     public static int height;
@@ -21,16 +18,38 @@ public class UIPanel extends JPanel implements Observer {
     private JLabel scoreLabel;
 
     private LifeUIPanel lifePanel;
+    private BuffPanel buffPanel;
 
     public UIPanel(int width, int height) {
         this.width = width;
         this.height = height;
-        setPreferredSize(new Dimension(width, height));
+
+        // [레이아웃] 세로로 배치 (Y_AXIS)
+        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        this.setPreferredSize(new Dimension(width, height));
         this.setBackground(Color.black);
+
+        //  점수 라벨 (맨 위)
         scoreLabel = new JLabel("Score: " + score);
         scoreLabel.setFont(scoreLabel.getFont().deriveFont(20.0F));
         scoreLabel.setForeground(Color.white);
-        this.add(scoreLabel, BorderLayout.WEST);
+
+        // 정렬을 위해 Panel에 담음
+        JPanel scoreContainer = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        scoreContainer.setBackground(Color.BLACK);
+        scoreContainer.add(scoreLabel);
+        this.add(scoreContainer);
+
+        // 버프 패널
+        buffPanel = new BuffPanel();
+
+        // 정렬을 위해 Panel에 담음
+        JPanel buffContainer = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        buffContainer.setBackground(Color.BLACK);
+        buffContainer.add(buffPanel);
+        this.add(buffContainer);
+
+        // 라이프 패널
         lifePanel = new LifeUIPanel(3000);
     }
 
@@ -48,7 +67,8 @@ public class UIPanel extends JPanel implements Observer {
         return score;
     }
 
-    //팩맨이 PacGum, SuperPacGum 또는 유령과 접촉하면 인터페이스에 알림이 가고, 그에 따라 표시된 점수를 갱신한다
+    // --- Observer 구현 ---
+
     @Override
     public void updatePacGumEaten(PacGum pg) {
         updateScore(10);
@@ -61,7 +81,6 @@ public class UIPanel extends JPanel implements Observer {
 
     @Override
     public void updateGhostCollision(Ghost gh) {
-        //팩맨이 유령과 접촉할 경우, 유령이 '겁먹은(frightened)' 모드일 때만 점수를 갱신한다
         if (gh.getState() instanceof FrightenedMode) {
             updateScore(500);
         }
@@ -70,11 +89,25 @@ public class UIPanel extends JPanel implements Observer {
     @Override
     public void updateItemEaten(Item item) {
         updateScore(item.getPoint());
-        // 추가적으로 아이템을 먹었으면 해당 이미지를 panel 하단에 출력하게 하면 좋을 듯.
     }
 
     @Override
     public void updatePacmanDead() {
         lifePanel.lifeDecrease();
+    }
+
+    @Override
+    public void updateEffectAdded(EffectCommand effect) {
+        buffPanel.addEffect(effect);
+    }
+
+    @Override
+    public void updateEffectRemoved(EffectCommand effect) {
+        buffPanel.removeEffect(effect);
+    }
+
+    @Override
+    public void updateEffectTick(EffectCommand effect) {
+        buffPanel.repaint();
     }
 }

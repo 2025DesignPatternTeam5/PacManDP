@@ -37,7 +37,8 @@ public class ItemFactoryTest {
 
         Item item = factory.makeItem(x, y);
         assertInstanceOf(Apple.class, item, "생성된 객체는 Apple 타입이어야 합니다.");
-        assertEquals(500, item.getPoint(), "Apple의 점수는 500점이어야 합니다.");        assertNotNull(item.getImage(), "이미지 로드 실패");
+        assertEquals(500, item.getPoint(), "Apple의 점수는 500점이어야 합니다.");
+        assertNotNull(item.getImage(), "이미지 로드 실패");
         assertEquals(x, item.getxPos(), "X 좌표가 일치해야 합니다.");
         assertEquals(y, item.getyPos(), "Y 좌표가 일치해야 합니다.");
         item.destroy();
@@ -63,14 +64,14 @@ public class ItemFactoryTest {
     }
 
     @Test
-    @DisplayName("PhantomFactory는 Phantom 객체를 생성하고, 점수는 0점이어야 한다")
-    void testPhantomFactory() {
-        AbstractItemFactory factory = new PhantomFactory();
+    @DisplayName("ShieldFactory()는 Phantom 객체를 생성하고, 점수는 0점이어야 한다")
+    void testShieldFactory() {
+        AbstractItemFactory factory = new ShieldFactory();
         int x = 100;
         int y = 200;
 
         Item item = factory.makeItem(x, y);
-        assertInstanceOf(Phantom.class, item, "생성된 객체는 Phantom 타입이어야 합니다.");
+        assertInstanceOf(Shield.class, item, "생성된 객체는 Phantom 타입이어야 합니다.");
         assertEquals(0, item.getPoint(), "Phantom의 점수는 0점이어야 합니다.");
         assertEquals(x, item.getxPos(), "X 좌표가 일치해야 합니다.");
         assertEquals(y, item.getyPos(), "Y 좌표가 일치해야 합니다.");

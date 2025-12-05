@@ -3,9 +3,8 @@ package game;
 import game.entities.*;
 import game.entities.ghosts.Blinky;
 import game.entities.ghosts.Ghost;
+import game.entities.items.EffectItem;
 import game.entities.items.Item;
-import game.entities.items.Phantom;
-import game.entities.items.SpeedUp;
 import game.gameState.GameClearMode;
 import game.gameState.GameOverMode;
 import game.gameState.GameState;
@@ -13,8 +12,9 @@ import game.gameState.RunningMode;
 import game.ghostFactory.*;
 import game.ghostStates.EatenMode;
 import game.ghostStates.FrightenedMode;
-import game.itemFactory.*;
 import game.ghostStates.GhostState;
+import game.itemFactory.*;
+import game.pacmanEffect.EffectCommand;
 import game.utils.CollisionDetector;
 import game.utils.CsvReader;
 import game.utils.KeyHandler;
@@ -71,8 +71,10 @@ public class Game implements Observer {
         itemfactories.add(new CherryFactory());
         itemfactories.add(new AppleFactory());
         itemfactories.add(new WatermelonFactory());
-        itemfactories.add(new PhantomFactory());
-        itemfactories.add(new SpeedUpFactory());
+        itemfactories.add(new BananaFactory()); // speed down
+        itemfactories.add(new SpeedUpFactory()); // speed up
+        itemfactories.add(new ShieldFactory()); // invulnerable
+        itemfactories.add(new DemonFactory()); // direction reversal
 
 
         Random random = new Random();
@@ -203,27 +205,31 @@ public class Game implements Observer {
         if (gh.getState() instanceof FrightenedMode) {
             gh.getState().eaten(); //유령이 먹혔을 때 특별한 전환이 존재하면, 그 상태가 그에 맞게 변경된다
         }
-        else if (!(gh.getState() instanceof EatenMode)) {
+        else if (!(gh.getState() instanceof EatenMode) && !pacman.getInvulnerable()) {
             //팩맨이 겁먹지 않았고 먹히지도 않은 유령과 접촉하면 게임 오버!
             System.out.println("Game over !\nScore : " + GameLauncher.getUIPanel().getScore());
             pacman.die();//팩맨 사망
         }
     }
 
-    // 미완 - 아이템에 따라 Pacman에게 어떤 영향을 줘여함.
+    @Override
+    public void updateEffectAdded(EffectCommand effect) {
+    }
+
+    @Override
+    public void updateEffectRemoved(EffectCommand effect) {
+    }
+
+    @Override
+    public void updateEffectTick(EffectCommand effect) {
+    }
+
     public void updateItemEaten(Item item) {
         SoundManager.getInstance().play(SoundManager.Sound.PAC_FRUIT);
-        if (item instanceof SpeedUp) {
-            // 이속 2배 증가
-            pacman.switchSpeedUpState();
-            System.out.println("BUFF: Speed UP!");
-        }
-        else if (item instanceof Phantom) {
-            // 무적
-            pacman.switchPhantomState();
-            System.out.println("BUFF: Invincible!");
-        }
 
+        if (item instanceof EffectItem) {
+            pacman.addEffect(((EffectItem) item).getEffectCommand());
+        }
         item.destroy();
     }
 

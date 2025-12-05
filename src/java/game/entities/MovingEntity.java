@@ -16,6 +16,8 @@ public abstract class MovingEntity extends Entity {
     protected int nbSubimagesPerCycle;
     protected int direction = 0;
     protected float imageSpd = 0.2f;
+    protected boolean invulnerable = false;
+    protected boolean confuse = false;
 
     public MovingEntity(int size, int xPos, int yPos, int spd, String spriteName, int nbSubimagesPerCycle, float imageSpd) {
         super(size, xPos, yPos);
@@ -153,5 +155,54 @@ public abstract class MovingEntity extends Entity {
 
     public int getSpd() {
         return spd;
+    }
+
+    public void setSpd(int spd) {
+        this.spd = spd;
+    }
+
+    public void setInvulnerable(boolean invulnerable) {
+        this.invulnerable = invulnerable;
+    }
+
+    public boolean getInvulnerable() {
+        return invulnerable;
+    }
+
+    public void setConfuse(boolean confuse) {
+        this.confuse = confuse;
+    }
+
+    public boolean getConfuse() {
+        return confuse;
+    }
+
+
+    // x, y 속도 갱신. map의 cellsize가 8단위 이므로 8에는 무조건 갈 수 있도록 함.
+    public void updatexySpd() {
+        if (xSpd != 0) {
+            if (xSpd > 0) {
+                xSpd = this.spd;
+                if (xPos % 8 > (xPos + xSpd) % 8)
+                    xSpd = xSpd - (xPos + xSpd) % 8;
+            }
+            else {
+                xSpd = -this.spd;
+                if (xPos % 8 != 0 && xPos % 8 < (xPos + xSpd) % 8)
+                    xSpd = xSpd + 8 - (xPos + xSpd) % 8;
+            }
+        }
+        if (ySpd != 0) {
+            if (ySpd > 0) {
+                ySpd = this.spd;
+                if (yPos % 8 > (yPos + ySpd) % 8)
+                    ySpd = ySpd - (yPos + ySpd) % 8;
+            }
+            else {
+                ySpd = -this.spd;
+                if (yPos % 8 != 0 && yPos % 8 < (yPos + ySpd) % 8)
+                    ySpd = ySpd + 8 - (yPos + ySpd) % 8;
+            }
+        }
     }
 }

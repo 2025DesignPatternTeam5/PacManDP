@@ -23,7 +23,7 @@ public class GameLauncher {
         }
 
         //점수 표시 UI 생성
-        uiPanel = new UIPanel(448,40);//256 496
+        uiPanel = new UIPanel(448,90);//256 496
         gameWindow.add(uiPanel, BorderLayout.NORTH);
         gameWindow.add(uiPanel.getLifePanel(), BorderLayout.SOUTH);
 
