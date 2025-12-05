@@ -63,7 +63,6 @@ public class Game implements Observer {
 
         Random random = new Random();
 
-
         //레벨에는 '그리드(격자)'가 있으며, CSV 파일의 각 칸마다 포함된 문자에 따라 그리드의 해당 칸에 특정 엔티티를 표시한다.
         for(int xx = 0 ; xx < cellsPerRow ; xx++) {
             for(int yy = 0 ; yy < cellsPerColumn ; yy++) {
@@ -196,7 +195,7 @@ public class Game implements Observer {
 
     // 미완 - 아이템에 따라 Pacman에게 어떤 영향을 줘여함.
     public void updateItemEaten(Item item) {
-
+        SoundManager.getInstance().play(SoundManager.Sound.PAC_FRUIT);
         if (item instanceof SpeedUp) {
             // 이속 2배 증가
             pacman.switchSpeedUpState();
@@ -214,6 +213,7 @@ public class Game implements Observer {
     @Override
     public void updatePacmanDead() {
         //여기에다가 팩맨 죽었을 때 게임 다시 초기화하는 로직 작성할 것
+        //모든 유령들의 움직임을 멈추거나, 아니면 그냥 다 destroy할 것
     }
 
     public static void setFirstInput(boolean b) {

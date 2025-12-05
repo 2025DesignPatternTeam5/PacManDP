@@ -24,11 +24,13 @@ public class Pacman extends MovingEntity implements Sujet {
     private CollisionDetector collisionDetector;
     private List<Observer> observerCollection;
     private float pacgumSoundTimer;
+    private boolean isDead;
 
     public Pacman(int xPos, int yPos) {
         super(32, xPos, yPos, 2, "pacman.png", 4, 0.3f);
         observerCollection = new ArrayList<>();
         pacgumSoundTimer = 0f;
+        isDead = false;
         this.normalState = new NormalState(this);
         this.speedUpState = new SpeedUpState(this);
         this.phantomState = new PhantomState(this);
@@ -77,6 +79,9 @@ public class Pacman extends MovingEntity implements Sujet {
 
     @Override
     public void update() {
+        if(isDead) //죽었다면 어떤 상호작용도 일어나지 않도록 바로 리턴
+            return;
+
         state.update();
         //팩맨이 PacGum, SuperPacGum 또는 유령과 접촉했는지 매번 확인하고, 그에 따라 옵저버들에게 알림을 보낸다
         PacGum pg = (PacGum) collisionDetector.checkCollision(this, PacGum.class);
@@ -195,6 +200,9 @@ public class Pacman extends MovingEntity implements Sujet {
 
     //사망
     public void die() {
+        isDead = true;
+        SoundManager.getInstance().stop(SoundManager.Sound.PAC_DOT);
+        SoundManager.getInstance().play(SoundManager.Sound.FAIL);
         notifyObserverPacmanDead();
     }
 }

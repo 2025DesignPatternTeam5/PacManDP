@@ -32,6 +32,7 @@ public class SoundManager {
 
     //특정 사운드 재생
     public void play(Sound sound) {
+        stop(sound);
         soundMap.get(sound).start();
     }
 
@@ -74,7 +75,7 @@ public class SoundManager {
             clip.open(audioIn);
 
             soundMap.put(type, clip);//Map에 <오디오 type, clip>을 등록
-            System.out.println("Sound loaded: " + filename);
+            //System.out.println("Sound loaded: " + filename);
         } catch(Exception e) {
             e.printStackTrace();
         }
