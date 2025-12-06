@@ -18,6 +18,8 @@ public class GameplayPanel extends JPanel implements Runnable {
     private Thread thread;
     private boolean running = false;
 
+    private int level = 0;
+
     private BufferedImage img;
     private Graphics2D g;
     private Image backgroundImage;
@@ -55,6 +57,20 @@ public class GameplayPanel extends JPanel implements Runnable {
         key = new KeyHandler(this);
 
         game = new Game();
+        game.delegatelvlGhost(level);
+
+    }
+    public void cleanup(){
+        if (g != null) {
+            g.dispose();
+        }
+        img = null;
+        g = null;
+        key = null;
+        if (game != null) {
+            game.cleanup();
+        }
+        game = null;
     }
 
     //게임 상태 업데이트
@@ -168,6 +184,8 @@ public class GameplayPanel extends JPanel implements Runnable {
             else if(game.getGameState() instanceof GameOverMode){
                 gameoverScreen();
                 if (key.k_y.isPressed) {
+                    level=0;
+                    cleanup();
                     init();
                     game.getGameState().retryGame();
                 }
@@ -179,6 +197,8 @@ public class GameplayPanel extends JPanel implements Runnable {
             else{
                 gameclearScreen();
                 if (key.k_y.isPressed) {
+                    if(level<4){level++;}
+                    cleanup();
                     init();
                     game.getGameState().retryGame();
                 }

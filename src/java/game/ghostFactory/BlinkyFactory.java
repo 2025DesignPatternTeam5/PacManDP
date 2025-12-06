@@ -7,10 +7,8 @@ import game.ghostStates.GhostState;
 //Factory concrète pour créer des fantômes Blinky
 public class BlinkyFactory extends AbstractGhostFactory {
     @Override
-    public Ghost makeGhost(int xPos, int yPos,int lvl) {
+    public Ghost makeGhost(int xPos, int yPos) {
         Ghost ghost = new Blinky(xPos, yPos);
-        GhostState state = ghost.getState();
-        state.lvlGhost(lvl);
         return ghost;
     }
 }

@@ -7,10 +7,8 @@ import game.ghostStates.GhostState;
 //Factory concrète pour créer des fantômes Inky
 public class InkyFactory extends AbstractGhostFactory {
     @Override
-    public Ghost makeGhost(int xPos, int yPos, int lvl) {
+    public Ghost makeGhost(int xPos, int yPos) {
         Ghost ghost = new Inky(xPos, yPos);
-        GhostState state = ghost.getState();
-        state.lvlGhost(lvl);
         return ghost;
     }
 }
