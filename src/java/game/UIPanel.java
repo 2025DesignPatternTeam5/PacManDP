@@ -67,6 +67,10 @@ public class UIPanel extends JPanel implements Observer {
         return score;
     }
 
+    public void scoreReset(){
+        this.score = 0;
+    }
+
     // --- Observer 구현 ---
 
     @Override

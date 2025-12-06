@@ -185,6 +185,8 @@ public class GameplayPanel extends JPanel implements Runnable {
                 gameoverScreen();
                 if (key.k_y.isPressed) {
                     level=0;
+                    GameLauncher.getUIPanel().scoreReset();
+                    GameLauncher.getUIPanel().updateScore(0);
                     cleanup();
                     init();
                     game.getGameState().retryGame();
