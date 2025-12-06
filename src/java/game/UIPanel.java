@@ -112,5 +112,8 @@ public class UIPanel extends JPanel implements Observer {
         buffPanel.repaint();
     }
 
-    public void setPacman(Pacman pacman) {lifePanel.setPacman(pacman);}
+    public void setPacman(Pacman pacman) {
+        lifePanel.setPacman(pacman);
+        lifePanel.updateLifeUI();
+    }
 }

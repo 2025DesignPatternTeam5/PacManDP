@@ -45,14 +45,14 @@ public class LifeUIPanel extends JPanel {
         while(tempScore >= unitScore) {
             tempScore -= unitScore;
             pacman.increaseLifeCnt();
-            setLifeUI();
+            updateLifeUI();
         }
     }
 
     //라이프 감소
     public void lifeDecrease() {
         pacman.decreaseLifeCnt();
-        setLifeUI();
+        updateLifeUI();
     }
 
      private void createBuffer() {
@@ -60,7 +60,7 @@ public class LifeUIPanel extends JPanel {
     }
 
     //라이프 UI 업데이트
-    public void setLifeUI() {
+    public void updateLifeUI() {
        dirty = true;
        repaint();
     }
