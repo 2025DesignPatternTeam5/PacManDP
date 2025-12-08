@@ -127,7 +127,7 @@ public class GameplayPanel extends JPanel implements Runnable {
             g.fillRect(0, 0, width, height);
             String gameClearText = "LEVEL CLEAR!";
             g.setColor(Color.YELLOW);
-            Font largeFont = new Font("Arial", Font.BOLD, 72);
+            Font largeFont = new Font("Arial", Font.BOLD, 56);
             g.setFont(largeFont);
             FontMetrics fmLarge = g.getFontMetrics();
             int xLarge = (width - fmLarge.stringWidth(gameClearText)) / 2;
