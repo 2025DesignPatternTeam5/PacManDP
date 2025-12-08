@@ -6,6 +6,9 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
+import static java.lang.Math.max;
+import static java.lang.Math.min;
+
 //Classe abtraite pour décrire une entité mouvante
 public abstract class MovingEntity extends Entity {
     protected int spd;
@@ -184,24 +187,25 @@ public abstract class MovingEntity extends Entity {
             if (xSpd > 0) {
                 xSpd = this.spd;
                 if (xPos % 8 > (xPos + xSpd) % 8)
-                    xSpd = xSpd - (xPos + xSpd) % 8;
+                    xSpd = max(xSpd - (xPos + xSpd) % 8, 1);
             }
             else {
                 xSpd = -this.spd;
+                System.out.println(xSpd + " " + ySpd + " " + xPos + " " + " " + yPos);
                 if (xPos % 8 != 0 && xPos % 8 < (xPos + xSpd) % 8)
-                    xSpd = xSpd + 8 - (xPos + xSpd) % 8;
+                    xSpd = min(xSpd + 8 - (xPos + xSpd) % 8, -1);
             }
         }
         if (ySpd != 0) {
             if (ySpd > 0) {
                 ySpd = this.spd;
                 if (yPos % 8 > (yPos + ySpd) % 8)
-                    ySpd = ySpd - (yPos + ySpd) % 8;
+                    ySpd = max(ySpd - (yPos + ySpd) % 8, 1);
             }
             else {
                 ySpd = -this.spd;
                 if (yPos % 8 != 0 && yPos % 8 < (yPos + ySpd) % 8)
-                    ySpd = ySpd + 8 - (yPos + ySpd) % 8;
+                    ySpd = min(ySpd + 8 - (yPos + ySpd) % 8, -1);
             }
         }
     }
