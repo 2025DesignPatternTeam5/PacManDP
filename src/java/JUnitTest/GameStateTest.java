@@ -44,5 +44,5 @@ public class GameStateTest {
         game.getGameState().die();
         assertInstanceOf(GameOverMode.class,game.getGameState(), "GameClearMode");
     }
-    
+
 }

@@ -125,14 +125,14 @@ public class GameplayPanel extends JPanel implements Runnable {
         if (g != null) {
             g.setColor(Color.BLACK);
             g.fillRect(0, 0, width, height);
-            String gameOverText = "LEVEL CLEAR!";
+            String gameClearText = "LEVEL CLEAR!";
             g.setColor(Color.YELLOW);
             Font largeFont = new Font("Arial", Font.BOLD, 72);
             g.setFont(largeFont);
             FontMetrics fmLarge = g.getFontMetrics();
-            int xLarge = (width - fmLarge.stringWidth(gameOverText)) / 2;
+            int xLarge = (width - fmLarge.stringWidth(gameClearText)) / 2;
             int yLarge = (height / 2) - (fmLarge.getHeight() / 2);
-            g.drawString(gameOverText, xLarge, yLarge);
+            g.drawString(gameClearText, xLarge, yLarge);
             String retryText = "Next level? (Y/N)";
             g.setColor(Color.WHITE);
             Font smallFont = new Font("Arial", Font.PLAIN, 24);
