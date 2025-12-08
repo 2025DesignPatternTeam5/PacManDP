@@ -5,6 +5,10 @@ import game.entities.ghosts.Blinky;
 import game.entities.ghosts.Ghost;
 import game.entities.items.EffectItem;
 import game.entities.items.Item;
+import game.gameState.GameClearMode;
+import game.gameState.GameOverMode;
+import game.gameState.GameState;
+import game.gameState.RunningMode;
 import game.ghostFactory.*;
 import game.ghostStates.EatenMode;
 import game.ghostStates.FrightenedMode;
@@ -36,9 +40,19 @@ public class Game implements Observer {
     private GhostState state;
     private int level = 2;
 
+    protected GameState gameState;
+
+    protected final GameState running;
+    protected final GameState gameover;
+    protected final GameState gameclear;
+
     public Game(){
         //게임 초기
+        running=new RunningMode(this);
+        gameover=new GameOverMode(this);
+        gameclear=new GameClearMode(this);
 
+        gameState=running;
         //레벨의 CSV파일 불러오기
         List<List<String>> data = null;
         try {
@@ -64,7 +78,6 @@ public class Game implements Observer {
 
 
         Random random = new Random();
-
 
         //레벨에는 '그리드(격자)'가 있으며, CSV 파일의 각 칸마다 포함된 문자에 따라 그리드의 해당 칸에 특정 엔티티를 표시한다.
         for(int xx = 0 ; xx < cellsPerRow ; xx++) {
@@ -144,8 +157,11 @@ public class Game implements Observer {
         if (this.pacGumCount <= 0)
         {
             // pacMan이 apcGum을 모두 먹었다면,
-            System.out.println("Game over !\nScore : " + GameLauncher.getUIPanel().getScore());
-            System.exit(0); //TODO
+            System.out.println("Level Clear!!");
+            if(level <3){level++;}
+            gameState.gameClear();
+//            System.out.println("Game over !\nScore : " + GameLauncher.getUIPanel().getScore());
+//            System.exit(0); //TODO
         }
     }
 
@@ -209,6 +225,7 @@ public class Game implements Observer {
     }
 
     public void updateItemEaten(Item item) {
+        SoundManager.getInstance().play(SoundManager.Sound.PAC_FRUIT);
 
         if (item instanceof EffectItem) {
             pacman.addEffect(((EffectItem) item).getEffectCommand());
@@ -219,6 +236,8 @@ public class Game implements Observer {
     @Override
     public void updatePacmanDead() {
         //여기에다가 팩맨 죽었을 때 게임 다시 초기화하는 로직 작성할 것
+        //모든 유령들의 움직임을 멈추거나, 아니면 그냥 다 destroy할 것
+        gameState.die();
     }
 
     public static void setFirstInput(boolean b) {
@@ -228,4 +247,16 @@ public class Game implements Observer {
     public static boolean getFirstInput() {
         return firstInput;
     }
+
+    public void switchGameOver() {
+        gameState=gameover;
+    }
+    public void switchGameClear(){
+        level++;
+        gameState=gameclear;
+    }
+    public void switchRunning(){
+        gameState=running;
+    }
+    public GameState getGameState() {return gameState;}
 }

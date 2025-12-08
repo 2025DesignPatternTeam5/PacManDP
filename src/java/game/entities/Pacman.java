@@ -22,12 +22,14 @@ public class Pacman extends MovingEntity implements Sujet {
     private List<Observer> observerCollection;
     private List<EffectCommand> activeEffects; // 아이템으로 인한 상태 관리
     private float pacgumSoundTimer;
+    private boolean isDead;
 
     public Pacman(int xPos, int yPos) {
         super(32, xPos, yPos, 2, "pacman.png", 4, 0.3f);
         observerCollection = new ArrayList<>();
         activeEffects = new ArrayList<>();
         pacgumSoundTimer = 0f;
+        isDead = false;
     }
 
     //이동 처리
@@ -126,7 +128,8 @@ public class Pacman extends MovingEntity implements Sujet {
 
     @Override
     public void update() {
-
+        if(isDead) //죽었다면 어떤 상호작용도 일어나지 않도록 바로 리턴
+            return;
         updateEffect();
 
         //팩맨이 PacGum, SuperPacGum 또는 유령과 접촉했는지 매번 확인하고, 그에 따라 옵저버들에게 알림을 보낸다
@@ -228,6 +231,9 @@ public class Pacman extends MovingEntity implements Sujet {
 
     //사망
     public void die() {
+        isDead = true;
+        SoundManager.getInstance().stop(SoundManager.Sound.PAC_DOT);
+        SoundManager.getInstance().play(SoundManager.Sound.FAIL);
         notifyObserverPacmanDead();
     }
 

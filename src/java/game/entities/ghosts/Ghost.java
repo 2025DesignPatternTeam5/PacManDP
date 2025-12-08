@@ -32,9 +32,9 @@ public abstract class Ghost extends MovingEntity {
 
     protected IGhostStrategy strategy;
 
-    private static int normalCnt; //일반 상태의 유령 개수
     private static int frightenedCnt;//공포 상태의 유령 개수 (먹힌 상태의 유령도 포함됨)
     private static int eatenCnt; //먹힌 상태의 유령 개수
+   
 
     public Ghost(int xPos, int yPos, String spriteName) {
         super(32, xPos, yPos, 2, spriteName, 2, 0.1f);
@@ -47,9 +47,8 @@ public abstract class Ghost extends MovingEntity {
         houseMode = new HouseMode(this);
         stayMode = new StayMode(this);
 
-        state = stayMode; //état initial
+        state = stayMode; //état initia;
 
-        normalCnt = 4;
         frightenedCnt = 0;
         eatenCnt = 0;
 
@@ -73,7 +72,6 @@ public abstract class Ghost extends MovingEntity {
     }
 
     public void switchFrightenedMode() {
-        normalCnt--;
         frightenedCnt++;
         frightenedTimer = 0;
         SoundManager.getInstance().stop(SoundManager.Sound.GHOST_NORMAL);
@@ -89,16 +87,20 @@ public abstract class Ghost extends MovingEntity {
     }
 
     public void switchHouseMode() {
+        state = houseMode;
+
+        if(eatenCnt == 0) //맨 처음 시작할 때 stay->house로 인한 함수 호출인 경우, 뒷 내용 필요 없으므로 바로 리턴
+            return;
+
         eatenCnt--;
-        if (eatenCnt == 0) { //다른 먹힌 상태의 유령이 존재하는 경우에만 다른 사운드로 교체한다
+        if (eatenCnt == 0) { //다른 먹힌 상태의 유령이 없는 경우에만 다른 사운드로 교체한다
             SoundManager.getInstance().stop(SoundManager.Sound.GHOST_EATEN);
-            if (frightenedCnt - 1 == 0) {//공포 상태 유령이 없으면 (본인은 제외) 일반 사운드를 재생한다
+            if (frightenedCnt - 1 == 0) {//공포 상태 유령이 없으면 (본인에 대한 frightenedCnt는 밑에 있는 함수에서 처리하므로 여기에서는 -1을 해줘야함) 일반 사운드를 재생한다
                 SoundManager.getInstance().playLoop(SoundManager.Sound.GHOST_NORMAL);
             } else { //공포 상태 유령이 존재하는 경우 공포 사운드를 재생한다
                 SoundManager.getInstance().playLoop(SoundManager.Sound.GHOST_FRIGHTENED);
             }
         }
-        state = houseMode;
     }
 
     public void switchChaseModeOrScatterMode() {
@@ -108,11 +110,10 @@ public abstract class Ghost extends MovingEntity {
             switchScatterMode();
         }
 
-        if(normalCnt == 4) //처음 시작할 때인 경우 아래의 코드를 실행할 필요X
+        if(frightenedCnt == 0) //처음 시작할 때인 경우 아래의 코드를 실행할 필요X
             return;
 
         frightenedCnt--;
-        normalCnt++;
         if (frightenedCnt == 0) { //공포 상태의 유령이 없으므로 일반 사운드 재생
             SoundManager.getInstance().stop(SoundManager.Sound.GHOST_FRIGHTENED);
             SoundManager.getInstance().playLoop(SoundManager.Sound.GHOST_NORMAL);
@@ -184,6 +185,9 @@ public abstract class Ghost extends MovingEntity {
         }else{
             g.drawImage(sprite.getSubimage((int)subimage * size + direction * size * nbSubimagesPerCycle, 0, size, size), this.xPos, this.yPos,null);
         }
-
     }
+
+    //위 두 함수는 Test 용도로만 써야한다. 외부에서 이 변수를 쓸 일이 없도록 한다.
+    public static int getFrightenedCnt() { return frightenedCnt;}
+    public static int getEatenCnt() { return eatenCnt;}
 }

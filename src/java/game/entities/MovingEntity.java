@@ -191,7 +191,6 @@ public abstract class MovingEntity extends Entity {
             }
             else {
                 xSpd = -this.spd;
-                System.out.println(xSpd + " " + ySpd + " " + xPos + " " + " " + yPos);
                 if (xPos % 8 != 0 && xPos % 8 < (xPos + xSpd) % 8)
                     xSpd = min(xSpd + 8 - (xPos + xSpd) % 8, -1);
             }

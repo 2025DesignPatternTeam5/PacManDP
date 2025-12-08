@@ -51,8 +51,8 @@ public class LifeUIPanel extends JPanel {
 
     //라이프 감소
     public void lifeDecrease() {
-        System.out.println("life : " + lives);
         lives--;
+        System.out.println("life : " + lives);
         setLifeUI();
         if(lives == 0) {
             System.out.println("게임 종료");
