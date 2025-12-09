@@ -1,0 +1,131 @@
+@startuml
+set namespaceSeparator none
+left to right direction
+'skinparam linetype ortho
+title ItemFactory Structure
+
+
+'class game.entities.items.Watermelon {
+'}
+'abstract class game.entities.MovingEntity {
+'}
+'class game.entities.items.SpeedUp {
+'}
+'class game.entities.items.Demon {
+'}
+'abstract class game.entities.items.Item {
+'# BufferedImage sprite
+'# int point
+'+ void render(Graphics2D)
+'+ void setPoint(int)
+'+ int getPoint()
+'+ BufferedImage getImage()
+'}
+'class game.entities.items.Apple {
+'}
+'
+'class game.entities.items.Banana {
+'}
+'
+'class game.entities.items.Cherry {
+'}
+'
+'abstract class game.entities.Entity {
+'# int size
+'# int xPos
+'# int yPos
+'- int initX
+'- int initY
+'# boolean destroyed
+'+ void update()
+'+ void render(Graphics2D)
+'+ void destroy()
+'+ boolean isDestroyed()
+'+ void resetPos()
+'+ int getSize()
+'+ int getxPos()
+'+ int getyPos()
+'+ {abstract}Rectangle getHitbox()
+'}
+'
+'abstract class game.entities.items.EffectItem {
+'# EffectCommand effectCommand
+'+ EffectCommand getEffectCommand()
+'}
+'
+'abstract class game.entities.StaticEntity {
+'# Rectangle hitbox
+'+ Rectangle getHitbox()
+'}
+'class game.entities.PacGum {
+'+ void render(Graphics2D)
+'+ void destroy()
+'}
+'
+'class game.entities.SuperPacGum {
+'- int frameCount
+'+ void render(Graphics2D)
+'+ void update()
+'}
+'
+'class game.entities.Wall {
+'}
+'class game.entities.items.Shield {
+'}
+
+abstract class game.itemFactory.AbstractItemFactory {
++ {abstract}Item makeItem(int,int)
+}
+
+class game.itemFactory.AppleFactory {
++ Item makeItem(int,int)
+}
+
+class game.itemFactory.DemonFactory {
++ Item makeItem(int,int)
+}
+
+class game.itemFactory.CherryFactory {
++ Item makeItem(int,int)
+}
+
+class game.itemFactory.SpeedUpFactory {
++ Item makeItem(int,int)
+}
+
+class game.itemFactory.WatermelonFactory {
++ Item makeItem(int,int)
+}
+class game.itemFactory.ShieldFactory {
++ Item makeItem(int,int)
+}
+class game.itemFactory.BananaFactory {
++ Item makeItem(int,int)
+}
+
+
+
+'game.entities.items.Item <|-- game.entities.items.Watermelon
+game.itemFactory.AbstractItemFactory <|-- game.itemFactory.AppleFactory
+'game.entities.Entity <|-- game.entities.MovingEntity
+'game.entities.items.EffectItem <|-- game.entities.items.SpeedUp
+'game.entities.items.EffectItem <|-- game.entities.items.Demon
+'game.entities.StaticEntity <|-- game.entities.items.Item
+'game.entities.items.Item <|-- game.entities.items.Apple
+'game.entities.items.EffectItem <|-- game.entities.items.Banana
+game.itemFactory.AbstractItemFactory <|-- game.itemFactory.DemonFactory
+game.itemFactory.AbstractItemFactory <|-- game.itemFactory.CherryFactory
+'game.entities.items.Item <|-- game.entities.items.Cherry
+game.itemFactory.AbstractItemFactory <|-- game.itemFactory.SpeedUpFactory
+'game.entities.MovingEntity <|-- game.entities.Pacman
+'game.entities.items.Item <|-- game.entities.items.EffectItem
+'game.entities.Entity <|-- game.entities.StaticEntity
+game.itemFactory.AbstractItemFactory <|-- game.itemFactory.WatermelonFactory
+'game.entities.StaticEntity <|-- game.entities.PacGum
+'game.entities.StaticEntity <|-- game.entities.SuperPacGum
+'game.entities.StaticEntity <|-- game.entities.Wall
+game.itemFactory.AbstractItemFactory <|-- game.itemFactory.ShieldFactory
+'game.entities.Wall <|-- game.entities.GhostHouse
+'game.entities.items.EffectItem <|-- game.entities.items.Shield
+game.itemFactory.AbstractItemFactory <|-- game.itemFactory.BananaFactory
+@enduml

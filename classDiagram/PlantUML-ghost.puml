@@ -1,0 +1,148 @@
+@startuml
+set namespaceSeparator none
+left to right direction
+'skinparam linetype ortho
+title Ghost Structure
+
+
+
+class game.ghostStrategies.ClydeStrategy {
+'- Ghost ghost
+'+ int[] getChaseTargetPosition()
+'+ int[] getScatterTargetPosition()
+}
+
+
+class game.ghostStrategies.InkyStrategy {
+'- Ghost otherGhost
+'+ int[] getChaseTargetPosition()
+'+ int[] getScatterTargetPosition()
+}
+
+
+class game.ghostStrategies.PinkyStrategy {
+'+ int[] getChaseTargetPosition()
+'+ int[] getScatterTargetPosition()
+}
+
+class game.entities.ghosts.Pinky {
+}
+class game.ghostStates.StayMode {
++ void lvlGhost(int)
+}
+
+abstract class game.entities.ghosts.Ghost {
+# GhostState state
+# GhostState chaseMode
+# GhostState scatterMode
+# GhostState frightenedMode
+# GhostState eatenMode
+# GhostState houseMode
+# GhostState stayMode
+# int modeTimer
+# int frightenedTimer
+# boolean isChasing
+# {static} BufferedImage frightenedSprite1
+# {static} BufferedImage frightenedSprite2
+# {static} BufferedImage eatenSprite
+# IGhostStrategy strategy
+- {static} int frightenedCnt
+- {static} int eatenCnt
++ void switchChaseMode()
++ void switchScatterMode()
++ void switchFrightenedMode()
++ void switchEatenMode()
++ void switchHouseMode()
++ void switchChaseModeOrScatterMode()
++ void setStayMode()
++ IGhostStrategy getStrategy()
++ void setStrategy(IGhostStrategy)
++ GhostState getState()
++ void update()
++ void render(Graphics2D)
++ {static} int getFrightenedCnt()
++ {static} int getEatenCnt()
+}
+
+
+class game.ghostStates.ScatterMode {
++ void superPacGumEaten()
++ void timerModeOver()
++ int[] getTargetPosition()
+}
+
+class game.entities.ghosts.Clyde {
+}
+class game.ghostStrategies.BlinkyStrategy {
+'+ int[] getChaseTargetPosition()
+'+ int[] getScatterTargetPosition()
+}
+
+class game.ghostStates.EatenMode {
++ void insideHouse()
++ int[] getTargetPosition()
++ void computeNextDir()
+}
+
+class game.ghostStates.HouseMode {
++ void outsideHouse()
++ int[] getTargetPosition()
++ void computeNextDir()
+}
+
+class game.ghostStates.FrightenedMode {
++ void eaten()
++ void timerFrightenedModeOver()
++ int[] getTargetPosition()
+}
+
+class game.entities.ghosts.Inky {
+}
+interface game.ghostStrategies.IGhostStrategy {
+~ int[] getChaseTargetPosition()
+~ int[] getScatterTargetPosition()
+}
+
+class game.entities.ghosts.Blinky {
+}
+class game.ghostStates.ChaseMode {
++ void superPacGumEaten()
++ void timerModeOver()
++ int[] getTargetPosition()
+}
+
+abstract class game.ghostStates.GhostState {
+# Ghost ghost
++ void superPacGumEaten()
++ void timerModeOver()
++ void timerFrightenedModeOver()
++ void eaten()
++ void outsideHouse()
++ void insideHouse()
++ void lvlGhost(int)
++ int[] getTargetPosition()
++ void computeNextDir()
+}
+
+
+
+
+game.ghostStrategies.IGhostStrategy <|.. game.ghostStrategies.ClydeStrategy
+game.ghostStrategies.IGhostStrategy <|.. game.ghostStrategies.InkyStrategy
+game.ghostStrategies.IGhostStrategy <|.. game.ghostStrategies.PinkyStrategy
+game.entities.ghosts.Ghost <|-- game.entities.ghosts.Pinky
+game.ghostStates.GhostState <|-- game.ghostStates.StayMode
+game.entities.MovingEntity <|-- game.entities.ghosts.Ghost
+game.ghostStates.GhostState <|-- game.ghostStates.ScatterMode
+game.entities.ghosts.Ghost <|-- game.entities.ghosts.Clyde
+game.ghostStrategies.IGhostStrategy <|.. game.ghostStrategies.BlinkyStrategy
+game.ghostStates.GhostState <|-- game.ghostStates.EatenMode
+game.ghostStates.GhostState <|-- game.ghostStates.HouseMode
+game.ghostStates.GhostState <|-- game.ghostStates.FrightenedMode
+game.entities.ghosts.Ghost <|-- game.entities.ghosts.Inky
+game.entities.ghosts.Ghost <|-- game.entities.ghosts.Blinky
+game.ghostStates.GhostState <|-- game.ghostStates.ChaseMode
+
+game.entities.ghosts.Ghost o-- game.ghostStates.GhostState
+game.entities.ghosts.Ghost o--> game.ghostStrategies.IGhostStrategy
+@enduml

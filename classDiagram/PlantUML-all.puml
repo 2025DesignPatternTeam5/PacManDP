@@ -635,7 +635,6 @@ game.ghostStrategies.IGhostStrategy <|.. game.ghostStrategies.ClydeStrategy
 game.entities.items.Item <|-- game.entities.items.Watermelon
 game.itemFactory.AbstractItemFactory <|-- game.itemFactory.AppleFactory
 game.entities.items.EffectItem <|-- game.entities.items.SpeedUp
-java.awt.event.KeyListener <|.. game.utils.KeyHandler
 game.utils.KeyHandler +.. game.utils.KeyHandler$Key
 game.entities.items.EffectItem <|-- game.entities.items.Demon
 game.entities.ghosts.Ghost <|-- game.entities.ghosts.Pinky
@@ -689,18 +688,21 @@ game.entities.Pacman --> game.pacmanEffect.EffectCommand : has effects
 game.Sujet --> game.Observer
 
 ' 3. Ghost와 전략/상태 패턴
-game.entities.ghosts.Ghost --> game.ghostStrategies.IGhostStrategy : uses strategy
-game.entities.ghosts.Ghost --> game.ghostStates.GhostState : has state
+game.entities.ghosts.Ghost o--> game.ghostStrategies.IGhostStrategy : uses strategy
+game.entities.ghosts.Ghost o-- game.ghostStates.GhostState : has state
+
 
 ' 4. UI와 패널 연결
-game.UIPanel --> game.LifeUIPanel : contains
-game.UIPanel --> game.BuffPanel : contains
+game.UIPanel *--> game.LifeUIPanel : contains
+game.UIPanel *--> game.BuffPanel : contains
 game.LifeUIPanel --> game.entities.Pacman : uses
 game.BuffPanel --> game.pacmanEffect.EffectCommand : watches
 
 ' 5. 팩토리 패턴 (생성 관계는 점선으로 보통 표현)
 game.ghostFactory.AbstractGhostFactory ..> game.entities.ghosts.Ghost : creates
-'game.itemFactory.AbstractItemFactory ..> game.entities.items.Item : creates
+game.itemFactory.AbstractItemFactory ..> game.entities.items.Item : creates
 
+'6. item
+game.entities.items.EffectItem --> game.pacmanEffect.EffectCommand : contains
 
 @enduml

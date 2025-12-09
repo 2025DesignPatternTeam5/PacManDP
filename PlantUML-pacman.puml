@@ -1,0 +1,155 @@
+@startuml
+set namespaceSeparator none
+left to right direction
+'skinparam linetype ortho
+title Pacman Structure
+
+
+class game.utils.CollisionDetector {
+- Game game
++ Entity checkCollision(Entity,Class<? extends Entity>)
++ Entity checkCollisionRect(Entity,Class<? extends Entity>)
+}
+
+
+class game.entities.Pacman {
+- float PACGUM_INIT_TIMER
+- CollisionDetector collisionDetector
+- List<Observer> observerCollection
+- List<EffectCommand> activeEffects
+- float pacgumSoundTimer
+- int lifeCnt
++ void input(KeyHandler)
++ EffectCommand findEffectClass(EffectCommand)
++ void addEffect(EffectCommand)
++ void updateEffect()
++ void update()
++ void setCollisionDetector(CollisionDetector)
++ void registerObserver(Observer)
++ void removeObserver(Observer)
++ void notifyObserverPacGumEaten(PacGum)
++ void notifyObserverSuperPacGumEaten(SuperPacGum)
++ void notifyObserverGhostCollision(Ghost)
++ void notifyObserverItemEaten(Item)
++ void notifyObserverEffectAdded(EffectCommand)
++ void notifyObserverEffectRemoved(EffectCommand)
++ void notifyObserverEffectTick(EffectCommand)
++ void notifyObserverPacmanDead()
++ void initPacgumTimer()
++ void die()
++ void removeEffectAll()
++ int getLifeCnt()
++ void increaseLifeCnt()
++ void decreaseLifeCnt()
++ boolean isLifeZero()
+}
+
+
+class game.pacmanEffect.SpeedUpEffect {
+- int speedBoost
++ void apply(MovingEntity)
++ void remove(MovingEntity)
+}
+
+
+class game.utils.KeyHandler {
++ {static} List<Key> keys
++ Key k_up
++ Key k_down
++ Key k_left
++ Key k_right
++ Key k_y
++ Key k_n
++ void toggle(KeyEvent,boolean)
++ void keyTyped(KeyEvent)
++ void keyPressed(KeyEvent)
++ void keyReleased(KeyEvent)
+}
+
+
+abstract class game.entities.MovingEntity {
+# int spd
+# int xSpd
+# int ySpd
+# BufferedImage sprite
+# float subimage
+# int nbSubimagesPerCycle
+# int direction
+# float imageSpd
+# boolean invulnerable
+# boolean confuse
++ void update()
++ void updatePosition()
++ void render(Graphics2D)
++ boolean onTheGrid()
++ boolean onGameplayWindow()
++ Rectangle getHitbox()
++ BufferedImage getSprite()
++ void setSprite(BufferedImage)
++ void setSprite(String)
++ float getSubimage()
++ void setSubimage(float)
++ int getNbSubimagesPerCycle()
++ void setNbSubimagesPerCycle(int)
++ int getDirection()
++ void setDirection(int)
++ int getxSpd()
++ void setxSpd(int)
++ int getySpd()
++ void setySpd(int)
++ int getSpd()
++ void setSpd(int)
++ void setInvulnerable(boolean)
++ boolean getInvulnerable()
++ void setConfuse(boolean)
++ boolean getConfuse()
++ void updatexySpd()
+}
+
+
+class game.pacmanEffect.InvulnerableEffect {
++ void apply(MovingEntity)
++ void remove(MovingEntity)
+}
+
+class game.pacmanEffect.ConfuseEffect {
++ void apply(MovingEntity)
++ void remove(MovingEntity)
+}
+
+abstract class game.pacmanEffect.EffectCommand {
+# BufferedImage effectImage
+# long timer
+# long duration
++ {abstract}void apply(MovingEntity)
++ {abstract}void remove(MovingEntity)
++ void resetTimer()
++ void update()
++ long getTimer()
++ boolean isExpired()
++ float getDurationRatio()
++ BufferedImage getEffectImage()
+}
+
+
+class game.pacmanEffect.SpeedDownEffect {
+- int speedBoost
++ void apply(MovingEntity)
++ void remove(MovingEntity)
+}
+
+
+
+
+game.entities.Sujet <|.. game.entities.Pacman
+game.entities.MovingEntity <|-- game.entities.Pacman
+game.pacmanEffect.EffectCommand <|-- game.pacmanEffect.SpeedUpEffect
+game.pacmanEffect.EffectCommand <|-- game.pacmanEffect.InvulnerableEffect
+game.pacmanEffect.EffectCommand <|-- game.pacmanEffect.ConfuseEffect
+game.pacmanEffect.EffectCommand <|-- game.pacmanEffect.SpeedDownEffect
+
+game.entities.Pacman --> game.utils.CollisionDetector : uses
+game.entities.Pacman --> game.utils.KeyHandler : input
+game.entities.Pacman --> game.pacmanEffect.EffectCommand : has effects
+
+@enduml

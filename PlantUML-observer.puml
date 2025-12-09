@@ -1,0 +1,173 @@
+@startuml
+set namespaceSeparator none
+left to right direction
+'skinparam linetype ortho
+title Pacman Game Structure
+
+
+
+
+class game.UIPanel {
++ {static} int width
++ {static} int height
+- int score
+- JLabel scoreLabel
+- LifeUIPanel lifePanel
+- BuffPanel buffPanel
++ LifeUIPanel getLifePanel()
++ void updateScore(int)
++ int getScore()
++ void scoreReset()
++ void updatePacGumEaten(PacGum)
++ void updateSuperPacGumEaten(SuperPacGum)
++ void updateGhostCollision(Ghost)
++ void updateItemEaten(Item)
++ void updatePacmanDead()
++ void updateEffectAdded(EffectCommand)
++ void updateEffectRemoved(EffectCommand)
++ void updateEffectTick(EffectCommand)
++ void setPacman(Pacman)
+}
+
+
+class game.Game {
+- List<Entity> objects
+- List<Ghost> ghosts
+- {static} List<Wall> walls
+- {static} Pacman pacman
+- {static} Blinky blinky
+- int pacGumCount
+- {static} boolean firstInput
+- int level
+# GameState gameState
+# GameState running
+# GameState gameover
+# GameState gameclear
+- boolean isPause
++ {static} List<Wall> getWalls()
++ List<Entity> getEntities()
++ void update()
++ void input(KeyHandler)
++ void render(Graphics2D)
++ {static} Pacman getPacman()
++ {static} Blinky getBlinky()
++ void updatePacGumEaten(PacGum)
++ void updateSuperPacGumEaten(SuperPacGum)
++ void updateGhostCollision(Ghost)
++ void updateEffectAdded(EffectCommand)
++ void updateEffectRemoved(EffectCommand)
++ void updateEffectTick(EffectCommand)
++ void updateItemEaten(Item)
++ void cleanup()
++ void delegatelvlGhost(int)
++ void updatePacmanDead()
+- void introEvent()
+- void resetMovingEntities()
++ {static} void setFirstInput(boolean)
++ {static} boolean getFirstInput()
++ void switchGameOver()
++ void switchGameClear()
++ void switchRunning()
++ GameState getGameState()
+}
+
+
+class game.entities.Pacman {
+- float PACGUM_INIT_TIMER
+- CollisionDetector collisionDetector
+- List<Observer> observerCollection
+- List<EffectCommand> activeEffects
+- float pacgumSoundTimer
+- int lifeCnt
++ void input(KeyHandler)
++ EffectCommand findEffectClass(EffectCommand)
++ void addEffect(EffectCommand)
++ void updateEffect()
++ void update()
++ void setCollisionDetector(CollisionDetector)
++ void registerObserver(Observer)
++ void removeObserver(Observer)
++ void notifyObserverPacGumEaten(PacGum)
++ void notifyObserverSuperPacGumEaten(SuperPacGum)
++ void notifyObserverGhostCollision(Ghost)
++ void notifyObserverItemEaten(Item)
++ void notifyObserverEffectAdded(EffectCommand)
++ void notifyObserverEffectRemoved(EffectCommand)
++ void notifyObserverEffectTick(EffectCommand)
++ void notifyObserverPacmanDead()
++ void initPacgumTimer()
++ void die()
++ void removeEffectAll()
++ int getLifeCnt()
++ void increaseLifeCnt()
++ void decreaseLifeCnt()
++ boolean isLifeZero()
+}
+
+
+class game.LifeUIPanel {
+- int tempScore
+- int unitScore
+- Pacman pacman
+- Image pacmanImage
+- BufferedImage buffer
+- boolean dirty
++ Image loadImage(String)
++ void increaseScore(int)
+- void lifeIncrease()
++ void lifeDecrease()
+- void createBuffer()
++ void updateLifeUI()
+- void redrawBuffer()
+# void paintComponent(Graphics)
++ void setPacman(Pacman)
+}
+
+
+interface game.Sujet {
+~ void registerObserver(Observer)
+~ void removeObserver(Observer)
+~ void notifyObserverPacGumEaten(PacGum)
+~ void notifyObserverSuperPacGumEaten(SuperPacGum)
+~ void notifyObserverGhostCollision(Ghost)
+~ void notifyObserverItemEaten(Item)
+~ void notifyObserverPacmanDead()
+~ void notifyObserverEffectAdded(EffectCommand)
+~ void notifyObserverEffectRemoved(EffectCommand)
+~ void notifyObserverEffectTick(EffectCommand)
+}
+
+class game.BuffPanel {
+- ArrayList<EffectCommand> displayedEffects
++ void addEffect(EffectCommand)
++ void removeEffect(EffectCommand)
+# void paintComponent(Graphics)
+}
+
+
+interface game.Observer {
+~ void updatePacGumEaten(PacGum)
+~ void updateSuperPacGumEaten(SuperPacGum)
+~ void updateGhostCollision(Ghost)
+~ void updateItemEaten(Item)
+~ void updatePacmanDead()
+~ void updateEffectAdded(EffectCommand)
+~ void updateEffectRemoved(EffectCommand)
+~ void updateEffectTick(EffectCommand)
+}
+
+
+
+game.Observer <|.. game.UIPanel
+game.Observer <|.. game.Game
+game.Sujet <|.. game.entities.Pacman
+game.entities.MovingEntity <|-- game.entities.Pacman
+
+
+game.Sujet --> game.Observer : observers
+game.UIPanel *--> game.LifeUIPanel : contains
+game.UIPanel *--> game.BuffPanel : contains
+game.LifeUIPanel --> game.entities.Pacman : uses
+game.BuffPanel --> game.pacmanEffect.EffectCommand : watches
+game.entities.Pacman --> game.pacmanEffect.EffectCommand : has effects
+@enduml
