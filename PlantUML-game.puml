@@ -1,0 +1,672 @@
+@startuml
+class game.ghostStrategies.InkyStrategy {
+- Ghost otherGhost
++ int[] getChaseTargetPosition()
++ int[] getScatterTargetPosition()
+}
+
+
+class game.pacmanEffect.SpeedUpEffect {
+- int speedBoost
++ void apply(MovingEntity)
++ void remove(MovingEntity)
+}
+
+
+class game.utils.WallCollisionDetector {
++ {static} boolean checkWallCollision(Entity,int,int)
++ {static} boolean checkWallCollision(Entity,int,int,boolean)
+}
+
+abstract class game.entities.MovingEntity {
+# int spd
+# int xSpd
+# int ySpd
+# BufferedImage sprite
+# float subimage
+# int nbSubimagesPerCycle
+# int direction
+# float imageSpd
+# boolean invulnerable
+# boolean confuse
++ void update()
++ void updatePosition()
++ void render(Graphics2D)
++ boolean onTheGrid()
++ boolean onGameplayWindow()
++ Rectangle getHitbox()
++ BufferedImage getSprite()
++ void setSprite(BufferedImage)
++ void setSprite(String)
++ float getSubimage()
++ void setSubimage(float)
++ int getNbSubimagesPerCycle()
++ void setNbSubimagesPerCycle(int)
++ int getDirection()
++ void setDirection(int)
++ int getxSpd()
++ void setxSpd(int)
++ int getySpd()
++ void setySpd(int)
++ int getSpd()
++ void setSpd(int)
++ void setInvulnerable(boolean)
++ boolean getInvulnerable()
++ void setConfuse(boolean)
++ boolean getConfuse()
++ void updatexySpd()
+}
+
+
+class game.ghostStrategies.PinkyStrategy {
++ int[] getChaseTargetPosition()
++ int[] getScatterTargetPosition()
+}
+
+abstract class game.pacmanEffect.EffectCommand {
+# BufferedImage effectImage
+# long timer
+# long duration
++ {abstract}void apply(MovingEntity)
++ {abstract}void remove(MovingEntity)
++ void resetTimer()
++ void update()
++ long getTimer()
++ boolean isExpired()
++ float getDurationRatio()
++ BufferedImage getEffectImage()
+}
+
+
+class game.pacmanEffect.SpeedDownEffect {
+- int speedBoost
++ void apply(MovingEntity)
++ void remove(MovingEntity)
+}
+
+
+class game.entities.items.Apple {
+}
+class game.utils.CsvReader {
++ List<List<String>> parseCsv(URI)
+}
+
+class game.entities.items.Banana {
+}
+class game.ghostStates.EatenMode {
++ void insideHouse()
++ int[] getTargetPosition()
++ void computeNextDir()
+}
+
+class game.utils.Awaiter {
+- {static} ScheduledExecutorService scheduler
++ {static} void delay(float,Runnable)
+}
+
+
+class game.ghostStates.FrightenedMode {
++ void eaten()
++ void timerFrightenedModeOver()
++ int[] getTargetPosition()
+}
+
+class game.itemFactory.DemonFactory {
++ Item makeItem(int,int)
+}
+
+class game.gameState.GameOverMode {
++ void retryGame()
++ void exitGame()
+}
+
+class game.utils.Utils {
+- {static} Map<Integer,Double> directionConverterMap
++ {static} double getDistance(double,double,double,double)
++ {static} double getDirection(double,double,double,double)
++ {static} int[] getPointDistanceDirection(int,int,double,double)
++ {static} double directionConverter(int)
++ {static} int randomInt(int)
++ {static} int randomInt(int,int)
++ {static} boolean randomBool()
+}
+
+
+interface game.Sujet {
+~ void registerObserver(Observer)
+~ void removeObserver(Observer)
+~ void notifyObserverPacGumEaten(PacGum)
+~ void notifyObserverSuperPacGumEaten(SuperPacGum)
+~ void notifyObserverGhostCollision(Ghost)
+~ void notifyObserverItemEaten(Item)
+~ void notifyObserverPacmanDead()
+~ void notifyObserverEffectAdded(EffectCommand)
+~ void notifyObserverEffectRemoved(EffectCommand)
+~ void notifyObserverEffectTick(EffectCommand)
+}
+
+class game.itemFactory.SpeedUpFactory {
++ Item makeItem(int,int)
+}
+
+class game.ghostFactory.PinkyFactory {
++ Ghost makeGhost(int,int)
+}
+
+class game.entities.Pacman {
+- float PACGUM_INIT_TIMER
+- CollisionDetector collisionDetector
+- List<Observer> observerCollection
+- List<EffectCommand> activeEffects
+- float pacgumSoundTimer
+- int lifeCnt
++ void input(KeyHandler)
++ EffectCommand findEffectClass(EffectCommand)
++ void addEffect(EffectCommand)
++ void updateEffect()
++ void update()
++ void setCollisionDetector(CollisionDetector)
++ void registerObserver(Observer)
++ void removeObserver(Observer)
++ void notifyObserverPacGumEaten(PacGum)
++ void notifyObserverSuperPacGumEaten(SuperPacGum)
++ void notifyObserverGhostCollision(Ghost)
++ void notifyObserverItemEaten(Item)
++ void notifyObserverEffectAdded(EffectCommand)
++ void notifyObserverEffectRemoved(EffectCommand)
++ void notifyObserverEffectTick(EffectCommand)
++ void notifyObserverPacmanDead()
++ void initPacgumTimer()
++ void die()
++ void removeEffectAll()
++ int getLifeCnt()
++ void increaseLifeCnt()
++ void decreaseLifeCnt()
++ boolean isLifeZero()
+}
+
+
+class game.LifeUIPanel {
+- int tempScore
+- int unitScore
+- Pacman pacman
+- Image pacmanImage
+- BufferedImage buffer
+- boolean dirty
++ Image loadImage(String)
++ void increaseScore(int)
+- void lifeIncrease()
++ void lifeDecrease()
+- void createBuffer()
++ void updateLifeUI()
+- void redrawBuffer()
+# void paintComponent(Graphics)
++ void setPacman(Pacman)
+}
+
+
+class game.pacmanEffect.ConfuseEffect {
++ void apply(MovingEntity)
++ void remove(MovingEntity)
+}
+
+abstract class game.gameState.GameState {
+# Game game
++ void die()
++ void gameClear()
++ void retryGame()
++ void exitGame()
+}
+
+
+class game.GameplayPanel {
++ {static} int width
++ {static} int height
+- Thread thread
+- boolean running
+- int level
+- BufferedImage img
+- Graphics2D g
+- Image backgroundImage
+- KeyHandler key
+- Game game
++ void addNotify()
++ void init()
++ void cleanup()
++ void update()
++ void input(KeyHandler)
++ void render()
++ void draw()
++ void gameoverScreen()
++ void gameclearScreen()
++ void run()
+}
+
+
+abstract class game.entities.items.EffectItem {
+# EffectCommand effectCommand
++ EffectCommand getEffectCommand()
+}
+
+
+class game.ghostFactory.ClydeFactory {
++ Ghost makeGhost(int,int)
+}
+
+class game.ghostStates.ScatterMode {
++ void superPacGumEaten()
++ void timerModeOver()
++ int[] getTargetPosition()
+}
+
+class game.itemFactory.WatermelonFactory {
++ Item makeItem(int,int)
+}
+
+class game.utils.CollisionDetector {
+- Game game
++ Entity checkCollision(Entity,Class<? extends Entity>)
++ Entity checkCollisionRect(Entity,Class<? extends Entity>)
+}
+
+
+class game.itemFactory.ShieldFactory {
++ Item makeItem(int,int)
+}
+
+class game.entities.ghosts.Inky {
+}
+class game.entities.GhostHouse {
+}
+class game.SoundManager {
+- {static} SoundManager instance
+- Map<Sound,Clip> soundMap
++ {static} SoundManager getInstance()
++ void play(Sound)
++ void playLoop(Sound)
++ void stop(Sound)
++ void stopAllSound()
++ float getClipLength(Sound)
++ Clip getClip(Sound)
+- void loadAllSoundFiles()
+- void loadClip(Sound)
+}
+
+
+enum game.Sound {
++  START
++  SUCCESS
++  FAIL
++  PAC_EAT
++  PAC_FRUIT
++  PAC_DOT
++  PAC_EXTRA
++  GHOST_NORMAL
++  GHOST_EATEN
++  GHOST_FRIGHTENED
+}
+
+abstract class game.itemFactory.AbstractItemFactory {
++ {abstract}Item makeItem(int,int)
+}
+
+class game.ghostStrategies.ClydeStrategy {
+- Ghost ghost
++ int[] getChaseTargetPosition()
++ int[] getScatterTargetPosition()
+}
+
+
+abstract class game.ghostFactory.AbstractGhostFactory {
++ {abstract}Ghost makeGhost(int,int)
+}
+
+class game.entities.items.Watermelon {
+}
+class game.itemFactory.AppleFactory {
++ Item makeItem(int,int)
+}
+
+class game.entities.items.SpeedUp {
+}
+class game.utils.KeyHandler {
++ {static} List<Key> keys
++ Key k_up
++ Key k_down
++ Key k_left
++ Key k_right
++ Key k_y
++ Key k_n
++ void toggle(KeyEvent,boolean)
++ void keyTyped(KeyEvent)
++ void keyPressed(KeyEvent)
++ void keyReleased(KeyEvent)
+}
+
+
+class game.utils.KeyHandler$Key {
++ boolean isPressed
++ void toggle(boolean)
+}
+
+
+class game.entities.items.Demon {
+}
+class game.entities.ghosts.Pinky {
+}
+abstract class game.entities.items.Item {
+# BufferedImage sprite
+# int point
++ void render(Graphics2D)
++ void setPoint(int)
++ int getPoint()
++ BufferedImage getImage()
+}
+
+
+abstract class game.entities.ghosts.Ghost {
+# GhostState state
+# GhostState chaseMode
+# GhostState scatterMode
+# GhostState frightenedMode
+# GhostState eatenMode
+# GhostState houseMode
+# GhostState stayMode
+# int modeTimer
+# int frightenedTimer
+# boolean isChasing
+# {static} BufferedImage frightenedSprite1
+# {static} BufferedImage frightenedSprite2
+# {static} BufferedImage eatenSprite
+# IGhostStrategy strategy
+- {static} int frightenedCnt
+- {static} int eatenCnt
++ void switchChaseMode()
++ void switchScatterMode()
++ void switchFrightenedMode()
++ void switchEatenMode()
++ void switchHouseMode()
++ void switchChaseModeOrScatterMode()
++ void setStayMode()
++ IGhostStrategy getStrategy()
++ void setStrategy(IGhostStrategy)
++ GhostState getState()
++ void update()
++ void render(Graphics2D)
++ {static} int getFrightenedCnt()
++ {static} int getEatenCnt()
+}
+
+
+class game.entities.ghosts.Clyde {
+}
+class game.ghostStrategies.BlinkyStrategy {
++ int[] getChaseTargetPosition()
++ int[] getScatterTargetPosition()
+}
+
+class game.ghostFactory.BlinkyFactory {
++ Ghost makeGhost(int,int)
+}
+
+class game.ghostFactory.InkyFactory {
++ Ghost makeGhost(int,int)
+}
+
+class game.gameState.RunningMode {
++ void die()
++ void gameClear()
+}
+
+class game.pacmanEffect.InvulnerableEffect {
++ void apply(MovingEntity)
++ void remove(MovingEntity)
+}
+
+class game.itemFactory.CherryFactory {
++ Item makeItem(int,int)
+}
+
+class game.entities.ghosts.Blinky {
+}
+class game.ghostStates.ChaseMode {
++ void superPacGumEaten()
++ void timerModeOver()
++ int[] getTargetPosition()
+}
+
+class game.entities.items.Cherry {
+}
+abstract class game.ghostStates.GhostState {
+# Ghost ghost
++ void superPacGumEaten()
++ void timerModeOver()
++ void timerFrightenedModeOver()
++ void eaten()
++ void outsideHouse()
++ void insideHouse()
++ void lvlGhost(int)
++ int[] getTargetPosition()
++ void computeNextDir()
+}
+
+
+class game.UIPanel {
++ {static} int width
++ {static} int height
+- int score
+- JLabel scoreLabel
+- LifeUIPanel lifePanel
+- BuffPanel buffPanel
++ LifeUIPanel getLifePanel()
++ void updateScore(int)
++ int getScore()
++ void scoreReset()
++ void updatePacGumEaten(PacGum)
++ void updateSuperPacGumEaten(SuperPacGum)
++ void updateGhostCollision(Ghost)
++ void updateItemEaten(Item)
++ void updatePacmanDead()
++ void updateEffectAdded(EffectCommand)
++ void updateEffectRemoved(EffectCommand)
++ void updateEffectTick(EffectCommand)
++ void setPacman(Pacman)
+}
+
+
+abstract class game.entities.Entity {
+# int size
+# int xPos
+# int yPos
+- int initX
+- int initY
+# boolean destroyed
++ void update()
++ void render(Graphics2D)
++ void destroy()
++ boolean isDestroyed()
++ void resetPos()
++ int getSize()
++ int getxPos()
++ int getyPos()
++ {abstract}Rectangle getHitbox()
+}
+
+
+class game.ghostStates.StayMode {
++ void lvlGhost(int)
+}
+
+abstract class game.entities.StaticEntity {
+# Rectangle hitbox
++ Rectangle getHitbox()
+}
+
+
+class game.entities.PacGum {
++ void render(Graphics2D)
++ void destroy()
+}
+
+class game.entities.SuperPacGum {
+- int frameCount
++ void render(Graphics2D)
++ void update()
+}
+
+
+class game.entities.Wall {
+}
+class game.Game {
+- List<Entity> objects
+- List<Ghost> ghosts
+- {static} List<Wall> walls
+- {static} Pacman pacman
+- {static} Blinky blinky
+- int pacGumCount
+- {static} boolean firstInput
+- int level
+# GameState gameState
+# GameState running
+# GameState gameover
+# GameState gameclear
+- boolean isPause
++ {static} List<Wall> getWalls()
++ List<Entity> getEntities()
++ void update()
++ void input(KeyHandler)
++ void render(Graphics2D)
++ {static} Pacman getPacman()
++ {static} Blinky getBlinky()
++ void updatePacGumEaten(PacGum)
++ void updateSuperPacGumEaten(SuperPacGum)
++ void updateGhostCollision(Ghost)
++ void updateEffectAdded(EffectCommand)
++ void updateEffectRemoved(EffectCommand)
++ void updateEffectTick(EffectCommand)
++ void updateItemEaten(Item)
++ void cleanup()
++ void delegatelvlGhost(int)
++ void updatePacmanDead()
+- void introEvent()
+- void resetMovingEntities()
++ {static} void setFirstInput(boolean)
++ {static} boolean getFirstInput()
++ void switchGameOver()
++ void switchGameClear()
++ void switchRunning()
++ GameState getGameState()
+}
+
+
+class game.ghostStates.HouseMode {
++ void outsideHouse()
++ int[] getTargetPosition()
++ void computeNextDir()
+}
+
+class game.gameState.GameClearMode {
++ void retryGame()
++ void exitGame()
+}
+
+class game.GameLauncher {
+- {static} UIPanel uiPanel
++ {static} void main(String[])
++ {static} UIPanel getUIPanel()
++ {static} void setPacman(Pacman)
+}
+
+
+interface game.ghostStrategies.IGhostStrategy {
+~ int[] getChaseTargetPosition()
+~ int[] getScatterTargetPosition()
+}
+
+class game.entities.items.Shield {
+}
+class game.itemFactory.BananaFactory {
++ Item makeItem(int,int)
+}
+
+interface game.Observer {
+~ void updatePacGumEaten(PacGum)
+~ void updateSuperPacGumEaten(SuperPacGum)
+~ void updateGhostCollision(Ghost)
+~ void updateItemEaten(Item)
+~ void updatePacmanDead()
+~ void updateEffectAdded(EffectCommand)
+~ void updateEffectRemoved(EffectCommand)
+~ void updateEffectTick(EffectCommand)
+}
+
+class game.BuffPanel {
+- ArrayList<EffectCommand> displayedEffects
++ void addEffect(EffectCommand)
++ void removeEffect(EffectCommand)
+# void paintComponent(Graphics)
+}
+
+
+
+
+game.ghostStrategies.IGhostStrategy <|.. game.ghostStrategies.InkyStrategy
+game.pacmanEffect.EffectCommand <|-- game.pacmanEffect.SpeedUpEffect
+game.entities.Entity <|-- game.entities.MovingEntity
+game.ghostStrategies.IGhostStrategy <|.. game.ghostStrategies.PinkyStrategy
+game.pacmanEffect.EffectCommand <|-- game.pacmanEffect.SpeedDownEffect
+game.entities.items.Item <|-- game.entities.items.Apple
+game.entities.items.EffectItem <|-- game.entities.items.Banana
+game.ghostStates.GhostState <|-- game.ghostStates.EatenMode
+game.ghostStates.GhostState <|-- game.ghostStates.FrightenedMode
+game.itemFactory.AbstractItemFactory <|-- game.itemFactory.DemonFactory
+game.gameState.GameState <|-- game.gameState.GameOverMode
+game.itemFactory.AbstractItemFactory <|-- game.itemFactory.SpeedUpFactory
+game.ghostFactory.AbstractGhostFactory <|-- game.ghostFactory.PinkyFactory
+game.entities.Sujet <|.. game.entities.Pacman
+game.entities.MovingEntity <|-- game.entities.Pacman
+game.JPanel <|-- game.LifeUIPanel
+game.pacmanEffect.EffectCommand <|-- game.pacmanEffect.ConfuseEffect
+game.Runnable <|.. game.GameplayPanel
+game.JPanel <|-- game.GameplayPanel
+game.entities.items.Item <|-- game.entities.items.EffectItem
+game.ghostFactory.AbstractGhostFactory <|-- game.ghostFactory.ClydeFactory
+game.ghostStates.GhostState <|-- game.ghostStates.ScatterMode
+game.itemFactory.AbstractItemFactory <|-- game.itemFactory.WatermelonFactory
+game.itemFactory.AbstractItemFactory <|-- game.itemFactory.ShieldFactory
+game.entities.ghosts.Ghost <|-- game.entities.ghosts.Inky
+game.entities.Wall <|-- game.entities.GhostHouse
+game.ghostStrategies.IGhostStrategy <|.. game.ghostStrategies.ClydeStrategy
+game.entities.items.Item <|-- game.entities.items.Watermelon
+game.itemFactory.AbstractItemFactory <|-- game.itemFactory.AppleFactory
+game.entities.items.EffectItem <|-- game.entities.items.SpeedUp
+java.awt.event.KeyListener <|.. game.utils.KeyHandler
+game.utils.KeyHandler +.. game.utils.KeyHandler$Key
+game.entities.items.EffectItem <|-- game.entities.items.Demon
+game.entities.ghosts.Ghost <|-- game.entities.ghosts.Pinky
+game.entities.StaticEntity <|-- game.entities.items.Item
+game.entities.MovingEntity <|-- game.entities.ghosts.Ghost
+game.entities.ghosts.Ghost <|-- game.entities.ghosts.Clyde
+game.ghostStrategies.IGhostStrategy <|.. game.ghostStrategies.BlinkyStrategy
+game.ghostFactory.AbstractGhostFactory <|-- game.ghostFactory.BlinkyFactory
+game.ghostFactory.AbstractGhostFactory <|-- game.ghostFactory.InkyFactory
+game.gameState.GameState <|-- game.gameState.RunningMode
+game.pacmanEffect.EffectCommand <|-- game.pacmanEffect.InvulnerableEffect
+game.itemFactory.AbstractItemFactory <|-- game.itemFactory.CherryFactory
+game.entities.ghosts.Ghost <|-- game.entities.ghosts.Blinky
+game.ghostStates.GhostState <|-- game.ghostStates.ChaseMode
+game.entities.items.Item <|-- game.entities.items.Cherry
+game.Observer <|.. game.UIPanel
+game.JPanel <|-- game.UIPanel
+game.ghostStates.GhostState <|-- game.ghostStates.StayMode
+game.entities.Entity <|-- game.entities.StaticEntity
+game.entities.StaticEntity <|-- game.entities.PacGum
+game.entities.StaticEntity <|-- game.entities.SuperPacGum
+game.entities.StaticEntity <|-- game.entities.Wall
+game.Observer <|.. game.Game
+game.ghostStates.GhostState <|-- game.ghostStates.HouseMode
+game.gameState.GameState <|-- game.gameState.GameClearMode
+game.entities.items.EffectItem <|-- game.entities.items.Shield
+game.itemFactory.AbstractItemFactory <|-- game.itemFactory.BananaFactory
+game.JPanel <|-- game.BuffPanel
+@enduml
