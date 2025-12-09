@@ -217,6 +217,7 @@ public class Game implements Observer {
     @Override
     public void updateGhostCollision(Ghost gh) {
         if (gh.getState() instanceof FrightenedMode) {
+            SoundManager.getInstance().play(SoundManager.Sound.PAC_EAT);
             gh.getState().eaten(); //유령이 먹혔을 때 특별한 전환이 존재하면, 그 상태가 그에 맞게 변경된다
         }
         else if (!(gh.getState() instanceof EatenMode) && !pacman.getInvulnerable()) {
