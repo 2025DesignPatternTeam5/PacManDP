@@ -1,4 +1,12 @@
 @startuml
+set namespaceSeparator none
+left to right direction
+'skinparam linetype ortho
+title Pacman Game Structure
+
+
+
+
 class game.ghostStrategies.InkyStrategy {
 - Ghost otherGhost
 + int[] getChaseTargetPosition()
@@ -292,19 +300,6 @@ class game.SoundManager {
 - void loadClip(Sound)
 }
 
-
-enum game.Sound {
-+  START
-+  SUCCESS
-+  FAIL
-+  PAC_EAT
-+  PAC_FRUIT
-+  PAC_DOT
-+  PAC_EXTRA
-+  GHOST_NORMAL
-+  GHOST_EATEN
-+  GHOST_FRIGHTENED
-}
 
 abstract class game.itemFactory.AbstractItemFactory {
 + {abstract}Item makeItem(int,int)
@@ -615,7 +610,6 @@ game.pacmanEffect.EffectCommand <|-- game.pacmanEffect.SpeedUpEffect
 game.entities.Entity <|-- game.entities.MovingEntity
 game.ghostStrategies.IGhostStrategy <|.. game.ghostStrategies.PinkyStrategy
 game.pacmanEffect.EffectCommand <|-- game.pacmanEffect.SpeedDownEffect
-game.entities.items.Item <|-- game.entities.items.Apple
 game.entities.items.EffectItem <|-- game.entities.items.Banana
 game.ghostStates.GhostState <|-- game.ghostStates.EatenMode
 game.ghostStates.GhostState <|-- game.ghostStates.FrightenedMode
@@ -623,13 +617,14 @@ game.itemFactory.AbstractItemFactory <|-- game.itemFactory.DemonFactory
 game.gameState.GameState <|-- game.gameState.GameOverMode
 game.itemFactory.AbstractItemFactory <|-- game.itemFactory.SpeedUpFactory
 game.ghostFactory.AbstractGhostFactory <|-- game.ghostFactory.PinkyFactory
-game.entities.Sujet <|.. game.entities.Pacman
+game.Sujet <|.. game.entities.Pacman
 game.entities.MovingEntity <|-- game.entities.Pacman
 game.JPanel <|-- game.LifeUIPanel
 game.pacmanEffect.EffectCommand <|-- game.pacmanEffect.ConfuseEffect
 game.Runnable <|.. game.GameplayPanel
 game.JPanel <|-- game.GameplayPanel
 game.entities.items.Item <|-- game.entities.items.EffectItem
+game.entities.items.Item <|-- game.entities.items.Apple
 game.ghostFactory.AbstractGhostFactory <|-- game.ghostFactory.ClydeFactory
 game.ghostStates.GhostState <|-- game.ghostStates.ScatterMode
 game.itemFactory.AbstractItemFactory <|-- game.itemFactory.WatermelonFactory
@@ -669,4 +664,43 @@ game.gameState.GameState <|-- game.gameState.GameClearMode
 game.entities.items.EffectItem <|-- game.entities.items.Shield
 game.itemFactory.AbstractItemFactory <|-- game.itemFactory.BananaFactory
 game.JPanel <|-- game.BuffPanel
+
+
+' 1. GameLauncher
+game.GameLauncher --> game.GameplayPanel
+game.GameLauncher --> game.UIPanel
+
+' 2. GameplayPanel
+game.GameplayPanel --> game.utils.KeyHandler
+game.GameplayPanel --> game.Game : has
+
+' 3. Game
+'game.Game --> game.entities.Pacman : contains
+game.Game *-- game.entities.ghosts.Ghost : contains
+game.Game *-- game.entities.Entity : contains
+game.Game --> game.gameState.GameState : manages
+game.Game ..> game.itemFactory.AbstractItemFactory
+
+' 2. Pacman의 의존성
+game.entities.Pacman --> game.utils.CollisionDetector : uses
+game.entities.Pacman --> game.utils.KeyHandler : input
+game.entities.Pacman --> game.pacmanEffect.EffectCommand : has effects
+
+game.Sujet --> game.Observer
+
+' 3. Ghost와 전략/상태 패턴
+game.entities.ghosts.Ghost --> game.ghostStrategies.IGhostStrategy : uses strategy
+game.entities.ghosts.Ghost --> game.ghostStates.GhostState : has state
+
+' 4. UI와 패널 연결
+game.UIPanel --> game.LifeUIPanel : contains
+game.UIPanel --> game.BuffPanel : contains
+game.LifeUIPanel --> game.entities.Pacman : watches
+game.BuffPanel --> game.pacmanEffect.EffectCommand
+
+' 5. 팩토리 패턴 (생성 관계는 점선으로 보통 표현)
+game.ghostFactory.AbstractGhostFactory ..> game.entities.ghosts.Ghost : creates
+'game.itemFactory.AbstractItemFactory ..> game.entities.items.Item : creates
+
+
 @enduml
