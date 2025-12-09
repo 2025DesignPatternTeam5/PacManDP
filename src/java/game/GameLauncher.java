@@ -1,5 +1,7 @@
 package game;
 
+import game.entities.Pacman;
+
 import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
@@ -37,4 +39,5 @@ public class GameLauncher {
     public static UIPanel getUIPanel() {
         return uiPanel;
     }
+    public static void setPacman(Pacman pacman) { uiPanel.setPacman(pacman); }
 }

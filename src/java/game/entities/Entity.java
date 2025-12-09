@@ -8,12 +8,17 @@ public abstract class Entity {
     protected int xPos;
     protected int yPos;
 
+    private int initX;
+    private int initY;
+
     protected boolean destroyed = false;
 
     public Entity(int size, int xPos, int yPos) {
         this.size = size;
         this.xPos = xPos;
         this.yPos = yPos;
+        this.initX = xPos;
+        this.initY = yPos;
     }
 
     public void update() {}
@@ -28,6 +33,11 @@ public abstract class Entity {
 
     public boolean isDestroyed() {
         return destroyed;
+    }
+
+    public void resetPos() {
+        this.xPos = initX;
+        this.yPos = initY;
     }
 
     public int getSize() {

@@ -48,6 +48,18 @@ public class SoundManager {
         clip.setFramePosition(0);
     }
 
+    public void stopAllSound() {
+        for(Sound sound : soundMap.keySet()) {
+            stop(sound);
+        }
+    }
+
+    public float getClipLength(Sound sound) {
+        long micro = soundMap.get(sound).getMicrosecondLength();
+        float second = (float) (micro / 1000000.0f);
+        return second;
+    }
+
     //Test를 위한 Getter함수
     public Clip getClip(Sound sound) {
         return soundMap.get(sound);

@@ -120,6 +120,8 @@ public abstract class Ghost extends MovingEntity {
         }
     }
 
+    public void setStayMode() { state = stayMode;}
+
     public IGhostStrategy getStrategy() {
         return this.strategy;
     }

@@ -1,8 +1,7 @@
 package game;
 
 import game.entities.*;
-import game.entities.ghosts.Blinky;
-import game.entities.ghosts.Ghost;
+import game.entities.ghosts.*;
 import game.entities.items.EffectItem;
 import game.entities.items.Item;
 import game.gameState.GameClearMode;
@@ -15,6 +14,7 @@ import game.ghostStates.FrightenedMode;
 import game.ghostStates.GhostState;
 import game.itemFactory.*;
 import game.pacmanEffect.EffectCommand;
+import game.utils.Awaiter;
 import game.utils.CollisionDetector;
 import game.utils.CsvReader;
 import game.utils.KeyHandler;
@@ -45,6 +45,8 @@ public class Game implements Observer {
     protected final GameState gameover;
     protected final GameState gameclear;
 
+    private boolean isPause;
+
     public Game(){
         //게임 초기
         running=new RunningMode(this);
@@ -63,6 +65,7 @@ public class Game implements Observer {
         int cellsPerColumn = data.size();
         int cellSize = 8;
         this.pacGumCount = 0;
+        this.isPause = true;
 
         CollisionDetector collisionDetector = new CollisionDetector(this);
         AbstractGhostFactory abstractGhostFactory = null;
@@ -87,6 +90,9 @@ public class Game implements Observer {
                 }else if (dataChar.equals("P")) { //팩맨 생성
                     pacman = new Pacman(xx * cellSize, yy * cellSize);
                     pacman.setCollisionDetector(collisionDetector);
+
+                    //LifeUIPanel에게 Pacman 참조 연결
+                    GameLauncher.setPacman(pacman);
 
                     //팩맨의 여러 옵저버(관찰자) 등록
                     pacman.registerObserver(GameLauncher.getUIPanel());
@@ -139,6 +145,8 @@ public class Game implements Observer {
                 walls.add((Wall) o);
             }
         }
+
+        introEvent();
     }
 
     public static List<Wall> getWalls() {
@@ -151,6 +159,9 @@ public class Game implements Observer {
 
     //모든 객체의 상태 업데이트
     public void update() {
+        if(isPause) //정지 상태이면 모든 update를 하지 못하도록 바로 리턴시킴
+            return;
+
         for (Entity o: objects) {
             if (!o.isDestroyed()) o.update();
         }
@@ -261,9 +272,35 @@ public class Game implements Observer {
 
     @Override
     public void updatePacmanDead() {
-        //여기에다가 팩맨 죽었을 때 게임 다시 초기화하는 로직 작성할 것
-        //모든 유령들의 움직임을 멈추거나, 아니면 그냥 다 destroy할 것
-        gameState.die();
+        isPause = true;
+        float length = SoundManager.getInstance().getClipLength(SoundManager.Sound.FAIL);
+        Awaiter.delay(length, ()-> {
+            resetMovingEntities();
+            //TODO: pacman버프 적용중이던거 다 초기화시키는 코드 여기에 넣기
+            for(Ghost g : ghosts) {
+                g.setStayMode();
+                g.getState().lvlGhost(level);
+            }
+        });
+
+        if(pacman.isLifeZero()) {
+            //완전히 게임오버
+            gameState.die();
+        }
+    }
+
+    private void introEvent() {
+        float length = SoundManager.getInstance().getClipLength(SoundManager.Sound.START);
+        SoundManager.getInstance().play(SoundManager.Sound.START);
+        Awaiter.delay(length - 1, ()-> isPause = false);
+    }
+
+    private void resetMovingEntities() {
+        pacman.resetPos();
+        for(Ghost g : ghosts) {
+            g.resetPos();
+        }
+        Awaiter.delay(2, ()->isPause = false);
     }
 
     public static void setFirstInput(boolean b) {

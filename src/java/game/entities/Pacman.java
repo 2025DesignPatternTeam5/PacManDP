@@ -3,33 +3,30 @@ package game.entities;
 import game.*;
 import game.entities.ghosts.Ghost;
 import game.entities.items.Item;
-import game.entities.items.SpeedUp;
 import game.utils.CollisionDetector;
 import game.utils.KeyHandler;
 import game.utils.WallCollisionDetector;
 import game.pacmanEffect.*;
 
-import javax.lang.model.type.NullType;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 //팩맨 클래스
 public class Pacman extends MovingEntity implements Sujet {
-    private final float PACGUM_INIT_TIMER = 15f;//팩검 타이머 초기화 상수
+    private final float PACGUM_INIT_TIMER = 20f;//팩검 타이머 초기화 상수
 
     private CollisionDetector collisionDetector;
     private List<Observer> observerCollection;
     private List<EffectCommand> activeEffects; // 아이템으로 인한 상태 관리
     private float pacgumSoundTimer;
-    private boolean isDead;
+    private int lifeCnt = 5;
 
     public Pacman(int xPos, int yPos) {
         super(32, xPos, yPos, 2, "pacman.png", 4, 0.3f);
         observerCollection = new ArrayList<>();
         activeEffects = new ArrayList<>();
         pacgumSoundTimer = 0f;
-        isDead = false;
     }
 
     //이동 처리
@@ -231,8 +228,7 @@ public class Pacman extends MovingEntity implements Sujet {
 
     //사망
     public void die() {
-        isDead = true;
-        SoundManager.getInstance().stop(SoundManager.Sound.PAC_DOT);
+        SoundManager.getInstance().stopAllSound();
         SoundManager.getInstance().play(SoundManager.Sound.FAIL);
         notifyObserverPacmanDead();
     }
@@ -247,4 +243,9 @@ public class Pacman extends MovingEntity implements Sujet {
             notifyObserverEffectRemoved(effect);
         }
     }
+
+    public int getLifeCnt() { return lifeCnt; }
+    public void increaseLifeCnt() { lifeCnt++;}
+    public void decreaseLifeCnt() { lifeCnt--;}
+    public boolean isLifeZero() {return lifeCnt == 0;}
 }
