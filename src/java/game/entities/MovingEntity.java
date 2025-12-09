@@ -204,7 +204,7 @@ public abstract class MovingEntity extends Entity {
             else {
                 ySpd = -this.spd;
                 if (yPos % 8 != 0 && yPos % 8 < (yPos + ySpd) % 8)
-                    ySpd = min(ySpd + 8 - (yPos + ySpd) % 8, 1);
+                    ySpd = min(ySpd + 8 - (yPos + ySpd) % 8, -1);
             }
         }
     }

@@ -115,7 +115,8 @@ public class Game implements Observer {
                     }
                 }else if (dataChar.equals(".")) { //팩검(팩맨 먹이) 생성
                     // random하게 Item소환.
-                    if (random.nextDouble() < 0.05) {
+//                    if (random.nextDouble() < 0.02 + 0.01 * min(0, level)) {
+                    if (random.nextDouble() < 0.03) {
                         int randomIndex = random.nextInt(itemfactories.size());
                         Item item = itemfactories.get(randomIndex).makeItem(xx * cellSize, yy * cellSize);
                         objects.add(item);

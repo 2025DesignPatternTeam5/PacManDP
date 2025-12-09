@@ -88,7 +88,7 @@ public class Pacman extends MovingEntity implements Sujet {
         }
     }
 
-    private EffectCommand findEffectClass(EffectCommand newEffect) {
+    public EffectCommand findEffectClass(EffectCommand newEffect) {
         for (EffectCommand effect : activeEffects) {
             if (effect.getClass().equals(newEffect.getClass())) {
                 return effect;
@@ -111,11 +111,8 @@ public class Pacman extends MovingEntity implements Sujet {
         notifyObserverEffectAdded(newEffect);
     }
 
-    @Override
-    public void update() {
-        if(isDead) //죽었다면 어떤 상호작용도 일어나지 않도록 바로 리턴
-            return;
-//        System.out.println("first:" + xPos + " " + yPos + " " + xSpd + " " + ySpd + " " + spd);
+    public void updateEffect() {
+        //        System.out.println("first:" + xPos + " " + yPos + " " + xSpd + " " + ySpd + " " + spd);
         Iterator<EffectCommand> iterator = activeEffects.iterator();
         while (iterator.hasNext()) {
             EffectCommand effect = iterator.next();
@@ -127,6 +124,13 @@ public class Pacman extends MovingEntity implements Sujet {
             }
             else notifyObserverEffectTick(effect);
         }
+    }
+
+    @Override
+    public void update() {
+        if(isDead) //죽었다면 어떤 상호작용도 일어나지 않도록 바로 리턴
+            return;
+        updateEffect();
 
         //팩맨이 PacGum, SuperPacGum 또는 유령과 접촉했는지 매번 확인하고, 그에 따라 옵저버들에게 알림을 보낸다
         PacGum pg = (PacGum) collisionDetector.checkCollision(this, PacGum.class);
@@ -231,5 +235,16 @@ public class Pacman extends MovingEntity implements Sujet {
         SoundManager.getInstance().stop(SoundManager.Sound.PAC_DOT);
         SoundManager.getInstance().play(SoundManager.Sound.FAIL);
         notifyObserverPacmanDead();
+    }
+
+    // effect 모두 제거 -> notify
+    public void removeEffectAll() {
+        Iterator<EffectCommand> iterator = activeEffects.iterator();
+        while (iterator.hasNext()) {
+            EffectCommand effect = iterator.next();
+            effect.remove(this);
+            iterator.remove();
+            notifyObserverEffectRemoved(effect);
+        }
     }
 }

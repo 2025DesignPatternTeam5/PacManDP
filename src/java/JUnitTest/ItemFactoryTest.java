@@ -41,6 +41,7 @@ public class ItemFactoryTest {
         assertNotNull(item.getImage(), "이미지 로드 실패");
         assertEquals(x, item.getxPos(), "X 좌표가 일치해야 합니다.");
         assertEquals(y, item.getyPos(), "Y 좌표가 일치해야 합니다.");
+        assertNotNull(item.getImage(), "이미지 로드 실패");
         item.destroy();
         assertEquals(-32, item.getxPos(), "X 좌표가 일치해야 합니다.");
         assertEquals(-32, item.getyPos(), "Y 좌표가 일치해야 합니다.");
@@ -58,23 +59,26 @@ public class ItemFactoryTest {
         assertEquals(1000, item.getPoint(), "Watermelon의 점수는 1000점이어야 합니다.");
         assertEquals(x, item.getxPos(), "X 좌표가 일치해야 합니다.");
         assertEquals(y, item.getyPos(), "Y 좌표가 일치해야 합니다.");
+        assertNotNull(item.getImage(), "이미지 로드 실패");
         item.destroy();
         assertEquals(-32, item.getxPos(), "X 좌표가 일치해야 합니다.");
         assertEquals(-32, item.getyPos(), "Y 좌표가 일치해야 합니다.");
     }
 
     @Test
-    @DisplayName("ShieldFactory()는 Phantom 객체를 생성하고, 점수는 0점이어야 한다")
+    @DisplayName("ShieldFactory()는 Shield 객체를 생성하고, 점수는 0점이어야 한다")
     void testShieldFactory() {
         AbstractItemFactory factory = new ShieldFactory();
         int x = 100;
         int y = 200;
 
         Item item = factory.makeItem(x, y);
-        assertInstanceOf(Shield.class, item, "생성된 객체는 Phantom 타입이어야 합니다.");
-        assertEquals(0, item.getPoint(), "Phantom의 점수는 0점이어야 합니다.");
+        assertInstanceOf(Shield.class, item, "생성된 객체는 Shield 타입이어야 합니다.");
+        assertEquals(0, item.getPoint(), "Shield의 점수는 0점이어야 합니다.");
         assertEquals(x, item.getxPos(), "X 좌표가 일치해야 합니다.");
         assertEquals(y, item.getyPos(), "Y 좌표가 일치해야 합니다.");
+        assertNotNull(item.getImage(), "이미지 로드 실패");
+        assertNotNull(((EffectItem)item).getEffectCommand(), "effect commnand가 없음");
         item.destroy();
         assertEquals(-32, item.getxPos(), "X 좌표가 일치해야 합니다.");
         assertEquals(-32, item.getyPos(), "Y 좌표가 일치해야 합니다.");
@@ -92,6 +96,48 @@ public class ItemFactoryTest {
         assertEquals(0, item.getPoint(), "SpeedUp의 점수는 0점이어야 합니다.");
         assertEquals(x, item.getxPos(), "X 좌표가 일치해야 합니다.");
         assertEquals(y, item.getyPos(), "Y 좌표가 일치해야 합니다.");
+        assertNotNull(((EffectItem)item).getEffectCommand(), "effect commnand가 없음");
+        assertNotNull(item.getImage(), "이미지 로드 실패");
+        item.destroy();
+        assertEquals(-32, item.getxPos(), "X 좌표가 일치해야 합니다.");
+        assertEquals(-32, item.getyPos(), "Y 좌표가 일치해야 합니다.");
+    }
+
+    // speed down
+    @Test
+    @DisplayName("SpeedUpFactory는 Banana 객체를 생성하고, 점수는 0점이어야 한다")
+    void testBananaFactory() {
+        AbstractItemFactory factory = new BananaFactory();
+        int x = 100;
+        int y = 200;
+
+        Item item = factory.makeItem(x, y);
+        assertInstanceOf(Banana.class, item, "생성된 객체는 Banana 타입이어야 합니다.");
+        assertEquals(0, item.getPoint(), "Banana의 점수는 0점이어야 합니다.");
+        assertEquals(x, item.getxPos(), "X 좌표가 일치해야 합니다.");
+        assertEquals(y, item.getyPos(), "Y 좌표가 일치해야 합니다.");
+        assertNotNull(item.getImage(), "이미지 로드 실패");
+        assertNotNull(((EffectItem)item).getEffectCommand(), "effect commnand가 없음");
+        item.destroy();
+        assertEquals(-32, item.getxPos(), "X 좌표가 일치해야 합니다.");
+        assertEquals(-32, item.getyPos(), "Y 좌표가 일치해야 합니다.");
+    }
+
+    // confuse
+    @Test
+    @DisplayName("DemonFactory는 Demon 객체를 생성하고, 점수는 0점이어야 한다")
+    void testDemonFactory() {
+        AbstractItemFactory factory = new DemonFactory();
+        int x = 100;
+        int y = 200;
+
+        Item item = factory.makeItem(x, y);
+        assertInstanceOf(Demon.class, item, "생성된 객체는 Demon 타입이어야 합니다.");
+        assertEquals(0, item.getPoint(), "Demon의 점수는 0점이어야 합니다.");
+        assertEquals(x, item.getxPos(), "X 좌표가 일치해야 합니다.");
+        assertEquals(y, item.getyPos(), "Y 좌표가 일치해야 합니다.");
+        assertNotNull(item.getImage(), "이미지 로드 실패");
+        assertNotNull(((EffectItem)item).getEffectCommand(), "effect commnand가 없음");
         item.destroy();
         assertEquals(-32, item.getxPos(), "X 좌표가 일치해야 합니다.");
         assertEquals(-32, item.getyPos(), "Y 좌표가 일치해야 합니다.");

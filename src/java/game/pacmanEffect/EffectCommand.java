@@ -45,6 +45,9 @@ public abstract class EffectCommand {
     public void update() {
         timer++;
     }
+    public long getTimer() {
+        return timer;
+    }
 
     public boolean isExpired() {
         return timer >= duration;
