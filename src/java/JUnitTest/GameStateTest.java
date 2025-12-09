@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 
 public class GameStateTest {
-    Game game=new Game();
+    Game game=new Game(0);
     UIPanel ui;
     JPanel gameWindow = new JPanel(new BorderLayout());
 

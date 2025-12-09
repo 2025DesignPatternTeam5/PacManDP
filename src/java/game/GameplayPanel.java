@@ -56,7 +56,7 @@ public class GameplayPanel extends JPanel implements Runnable {
 
         key = new KeyHandler(this);
 
-        game = new Game();
+        game = new Game(level);
         game.delegatelvlGhost(level);
 
     }

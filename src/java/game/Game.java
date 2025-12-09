@@ -37,7 +37,7 @@ public class Game implements Observer {
     private int pacGumCount = 0;
 
     private static boolean firstInput = false;
-    private GhostState state;
+    private int level;
 
     protected GameState gameState;
 
@@ -47,7 +47,7 @@ public class Game implements Observer {
 
     private boolean isPause;
 
-    public Game(){
+    public Game(int level){
         //게임 초기
         running=new RunningMode(this);
         gameover=new GameOverMode(this);
@@ -66,6 +66,7 @@ public class Game implements Observer {
         int cellSize = 8;
         this.pacGumCount = 0;
         this.isPause = true;
+        this.level = level;
 
         CollisionDetector collisionDetector = new CollisionDetector(this);
         AbstractGhostFactory abstractGhostFactory = null;
@@ -168,10 +169,11 @@ public class Game implements Observer {
         if (this.pacGumCount <= 0)
         {
             // pacMan이 apcGum을 모두 먹었다면,
+            isPause = true;
+            SoundManager.getInstance().stopAllSound();
+            SoundManager.getInstance().play(SoundManager.Sound.SUCCESS);
             System.out.println("Level Clear!!");
             gameState.gameClear();
-//            System.out.println("Game over !\nScore : " + GameLauncher.getUIPanel().getScore());
-//            System.exit(0); //TODO
         }
     }
 
@@ -218,10 +220,6 @@ public class Game implements Observer {
         else if (!(gh.getState() instanceof EatenMode) && !pacman.getInvulnerable()) {
             //팩맨이 겁먹지 않았고 먹히지도 않은 유령과 접촉하면 게임 오버!
             System.out.println("Game over !\nScore : " + GameLauncher.getUIPanel().getScore());
-//            if(pacman.isLifeZero()){
-//                System.out.println("Game over !\nScore : " + GameLauncher.getUIPanel().getScore());
-//                pacman.die();
-//            }
             //팩맨 사망
             pacman.die();
         }
@@ -273,10 +271,11 @@ public class Game implements Observer {
     @Override
     public void updatePacmanDead() {
         isPause = true;
+        pacman.removeEffectAll();
+
         float length = SoundManager.getInstance().getClipLength(SoundManager.Sound.FAIL);
         Awaiter.delay(length, ()-> {
             resetMovingEntities();
-            //TODO: pacman버프 적용중이던거 다 초기화시키는 코드 여기에 넣기
             for(Ghost g : ghosts) {
                 g.setStayMode();
                 g.getState().lvlGhost(level);
@@ -290,6 +289,7 @@ public class Game implements Observer {
     }
 
     private void introEvent() {
+        SoundManager.getInstance().stopAllSound();
         float length = SoundManager.getInstance().getClipLength(SoundManager.Sound.START);
         SoundManager.getInstance().play(SoundManager.Sound.START);
         Awaiter.delay(length - 1, ()-> isPause = false);

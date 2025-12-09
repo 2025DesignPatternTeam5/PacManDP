@@ -51,7 +51,7 @@ public class UIPanel extends JPanel implements Observer {
         this.add(buffContainer);
 
         // 라이프 패널
-        lifePanel = new LifeUIPanel(3000);
+        lifePanel = new LifeUIPanel(5000);
     }
 
     public LifeUIPanel getLifePanel() {

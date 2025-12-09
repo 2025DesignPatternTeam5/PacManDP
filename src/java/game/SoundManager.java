@@ -10,6 +10,7 @@ import java.util.Map;
 public class SoundManager {
     public enum Sound {
         START,
+        SUCCESS,
         FAIL,
         PAC_EAT,
         PAC_FRUIT,

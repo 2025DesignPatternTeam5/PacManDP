@@ -158,7 +158,7 @@ class PacmanEffectTest {
         EffectCommand shieldEffect = ((EffectItem)item).getEffectCommand();
 
         AbstractGhostFactory ghostFactory = new BlinkyFactory();
-        Ghost ghost = ghostFactory.makeGhost(40, 40, 1);
+        Ghost ghost = ghostFactory.makeGhost(40, 40);
 
         // When: 효과 적용 (아이템 획득 시뮬레이션)
         pacman.addEffect(shieldEffect);
