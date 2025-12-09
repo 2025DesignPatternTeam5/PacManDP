@@ -25,6 +25,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import static java.lang.Math.min;
+
 //게임 자체를 관리하는 클래스
 public class Game implements Observer {
     //화면에 표시되는 모든 객체(엔티티)들을 목록으로 관리하기 위한 코드
@@ -121,8 +123,8 @@ public class Game implements Observer {
                     }
                 }else if (dataChar.equals(".")) { //팩검(팩맨 먹이) 생성
                     // random하게 Item소환.
-//                    if (random.nextDouble() < 0.02 + 0.01 * min(0, level)) {
-                    if (random.nextDouble() < 0.03) {
+                    if (random.nextDouble() < 0.02 + 0.01 * min(0, level)) {
+                    //if (random.nextDouble() < 0.03) {
                         int randomIndex = random.nextInt(itemfactories.size());
                         Item item = itemfactories.get(randomIndex).makeItem(xx * cellSize, yy * cellSize);
                         objects.add(item);
