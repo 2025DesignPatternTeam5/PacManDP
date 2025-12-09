@@ -695,8 +695,8 @@ game.entities.ghosts.Ghost --> game.ghostStates.GhostState : has state
 ' 4. UI와 패널 연결
 game.UIPanel --> game.LifeUIPanel : contains
 game.UIPanel --> game.BuffPanel : contains
-game.LifeUIPanel --> game.entities.Pacman : watches
-game.BuffPanel --> game.pacmanEffect.EffectCommand
+game.LifeUIPanel --> game.entities.Pacman : uses
+game.BuffPanel --> game.pacmanEffect.EffectCommand : watches
 
 ' 5. 팩토리 패턴 (생성 관계는 점선으로 보통 표현)
 game.ghostFactory.AbstractGhostFactory ..> game.entities.ghosts.Ghost : creates
