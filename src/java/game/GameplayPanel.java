@@ -18,6 +18,8 @@ public class GameplayPanel extends JPanel implements Runnable {
     private Thread thread;
     private boolean running = false;
 
+    private int level = 0;
+
     private BufferedImage img;
     private Graphics2D g;
     private Image backgroundImage;
@@ -55,6 +57,20 @@ public class GameplayPanel extends JPanel implements Runnable {
         key = new KeyHandler(this);
 
         game = new Game();
+        game.delegatelvlGhost(level);
+
+    }
+    public void cleanup(){
+        if (g != null) {
+            g.dispose();
+        }
+        img = null;
+        g = null;
+        key = null;
+        if (game != null) {
+            game.cleanup();
+        }
+        game = null;
     }
 
     //게임 상태 업데이트
@@ -109,14 +125,14 @@ public class GameplayPanel extends JPanel implements Runnable {
         if (g != null) {
             g.setColor(Color.BLACK);
             g.fillRect(0, 0, width, height);
-            String gameOverText = "LEVEL CLEAR!";
+            String gameClearText = "LEVEL CLEAR!";
             g.setColor(Color.YELLOW);
-            Font largeFont = new Font("Arial", Font.BOLD, 72);
+            Font largeFont = new Font("Arial", Font.BOLD, 56);
             g.setFont(largeFont);
             FontMetrics fmLarge = g.getFontMetrics();
-            int xLarge = (width - fmLarge.stringWidth(gameOverText)) / 2;
+            int xLarge = (width - fmLarge.stringWidth(gameClearText)) / 2;
             int yLarge = (height / 2) - (fmLarge.getHeight() / 2);
-            g.drawString(gameOverText, xLarge, yLarge);
+            g.drawString(gameClearText, xLarge, yLarge);
             String retryText = "Next level? (Y/N)";
             g.setColor(Color.WHITE);
             Font smallFont = new Font("Arial", Font.PLAIN, 24);
@@ -168,6 +184,10 @@ public class GameplayPanel extends JPanel implements Runnable {
             else if(game.getGameState() instanceof GameOverMode){
                 gameoverScreen();
                 if (key.k_y.isPressed) {
+                    level=0;
+                    GameLauncher.getUIPanel().scoreReset();
+                    GameLauncher.getUIPanel().updateScore(0);
+                    cleanup();
                     init();
                     game.getGameState().retryGame();
                 }
@@ -179,6 +199,8 @@ public class GameplayPanel extends JPanel implements Runnable {
             else{
                 gameclearScreen();
                 if (key.k_y.isPressed) {
+                    if(level<4){level++;}
+                    cleanup();
                     init();
                     game.getGameState().retryGame();
                 }
