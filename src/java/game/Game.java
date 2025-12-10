@@ -171,6 +171,7 @@ public class Game implements Observer {
         if (this.pacGumCount <= 0)
         {
             // pacMan이 apcGum을 모두 먹었다면,
+            pacman.removeEffectAll();
             isPause = true;
             SoundManager.getInstance().stopAllSound();
             SoundManager.getInstance().play(SoundManager.Sound.SUCCESS);
