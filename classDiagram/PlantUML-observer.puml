@@ -162,6 +162,10 @@ game.Observer <|.. game.UIPanel
 game.Observer <|.. game.Game
 game.Sujet <|.. game.entities.Pacman
 game.entities.MovingEntity <|-- game.entities.Pacman
+game.pacmanEffect.EffectCommand <|-- game.pacmanEffect.SpeedUpEffect
+game.pacmanEffect.EffectCommand <|-- game.pacmanEffect.InvulnerableEffect
+game.pacmanEffect.EffectCommand <|-- game.pacmanEffect.ConfuseEffect
+game.pacmanEffect.EffectCommand <|-- game.pacmanEffect.SpeedDownEffect
 
 
 game.Sujet --> game.Observer : observers

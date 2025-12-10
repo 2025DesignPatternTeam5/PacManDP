@@ -1,17 +1,10 @@
 package JUnitTest;
 
-import game.LifeUIPanel;
 import game.UIPanel;
 import game.entities.Pacman;
-import game.entities.ghosts.Blinky;
-import game.entities.ghosts.Ghost;
 import game.entities.items.Item;
-import game.ghostStates.FrightenedMode;
-import game.ghostStates.GhostState;
 import game.itemFactory.AbstractItemFactory;
 import game.itemFactory.AppleFactory;
-import org.junit.Before;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

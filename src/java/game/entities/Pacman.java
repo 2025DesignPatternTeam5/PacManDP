@@ -99,7 +99,7 @@ public class Pacman extends MovingEntity implements Sujet {
         EffectCommand effect = findEffectClass(newEffect);
         if (effect != null) {
             effect.resetTimer(); // 지속시간 초기화
-            System.out.println(newEffect.getClass().getSimpleName() + " 시간 연장됨!");
+//            System.out.println(newEffect.getClass().getSimpleName() + " 시간 연장됨!");
             return;
         }
         // 새로운 효과면 적용 및 리스트 추가

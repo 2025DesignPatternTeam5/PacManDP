@@ -110,10 +110,9 @@ public abstract class Ghost extends MovingEntity {
             switchScatterMode();
         }
 
-        if(frightenedCnt == 0) //처음 시작할 때인 경우 아래의 코드를 실행할 필요X
-            return;
+        if(frightenedCnt > 0)
+            frightenedCnt--;
 
-        frightenedCnt--;
         if (frightenedCnt == 0) { //공포 상태의 유령이 없으므로 일반 사운드 재생
             SoundManager.getInstance().stop(SoundManager.Sound.GHOST_FRIGHTENED);
             SoundManager.getInstance().playLoop(SoundManager.Sound.GHOST_NORMAL);
