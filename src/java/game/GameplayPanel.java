@@ -49,7 +49,7 @@ public class GameplayPanel extends JPanel implements Runnable {
     }
 
     //initialisation du jeu
-    public void init() {
+    public void init() throws IOException {
         running = true;
         img = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
         g = (Graphics2D) img.getGraphics();
@@ -147,7 +147,11 @@ public class GameplayPanel extends JPanel implements Runnable {
 
     @Override
     public void run() {
-        init();
+        try {
+            init();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
         //Pour faire en sorte que le jeu tourne à 60FPS (tutoriel consulté : https://www.youtube.com/watch?v=LhUN3EKZiio)
         final double GAME_HERTZ = 60.0;
@@ -178,17 +182,56 @@ public class GameplayPanel extends JPanel implements Runnable {
             if (now - lastUpdateTime > TBU) {
                 lastUpdateTime = now - TBU;
             }
-            if(game.getGameState() instanceof RunningMode){
-                render();
-            }
-            else if(game.getGameState() instanceof GameOverMode){
-                gameoverScreen();
+//            if(game.getGameState() instanceof RunningMode){
+//                render();
+//            }
+//            else if(game.getGameState() instanceof GameOverMode){
+//                gameoverScreen();
+//                if (key.k_y.isPressed) {
+//                    level=0;
+//                    GameLauncher.getUIPanel().scoreReset();
+//                    GameLauncher.getUIPanel().updateScore(0);
+//                    cleanup();
+//                    try {
+//                        init();
+//                    } catch (IOException e) {
+//                        throw new RuntimeException(e);
+//                    }
+//                    game.getGameState().retryGame();
+//                }
+//                // 'N' 입력: 게임 종료 (Exit)
+//                else if (key.k_n.isPressed) {
+//                    game.getGameState().exitGame();
+//                }
+//            }
+//            else{
+//                gameclearScreen();
+//                if (key.k_y.isPressed) {
+//                    if(level<4){level++;}
+//                    cleanup();
+//                    try {
+//                        init();
+//                    } catch (IOException e) {
+//                        throw new RuntimeException(e);
+//                    }
+//                    game.getGameState().retryGame();
+//                }
+//                // 'N' 입력: 게임 종료 (Exit)
+//                else if (key.k_n.isPressed) {
+//                    game.getGameState().exitGame();
+//                }
+//            }
+
+            game.getGameState().screen(width,height,g);
+            if(game.getGameState().state_now()==1){
                 if (key.k_y.isPressed) {
-                    level=0;
-                    GameLauncher.getUIPanel().scoreReset();
-                    GameLauncher.getUIPanel().updateScore(0);
+                    if(level<4){level++;}
                     cleanup();
-                    init();
+                    try {
+                        init();
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
                     game.getGameState().retryGame();
                 }
                 // 'N' 입력: 게임 종료 (Exit)
@@ -196,12 +239,17 @@ public class GameplayPanel extends JPanel implements Runnable {
                     game.getGameState().exitGame();
                 }
             }
-            else{
-                gameclearScreen();
+            else if(game.getGameState().state_now()==2){
                 if (key.k_y.isPressed) {
-                    if(level<4){level++;}
+                    level=0;
+                    GameLauncher.getUIPanel().scoreReset();
+                    GameLauncher.getUIPanel().updateScore(0);
                     cleanup();
-                    init();
+                    try {
+                        init();
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
                     game.getGameState().retryGame();
                 }
                 // 'N' 입력: 게임 종료 (Exit)
