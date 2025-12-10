@@ -17,5 +17,4 @@ public abstract class GameState {
     public Graphics2D screen(int width, int height, Graphics2D g){return g;};
     //현재의 상태를 int로 반환 (running == 0 , gameclear == 1, gameover ==2)
     public int state_now(){return 0;}
-
 }
