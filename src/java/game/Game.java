@@ -20,6 +20,7 @@ import game.utils.CsvReader;
 import game.utils.KeyHandler;
 
 import java.awt.*;
+import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
@@ -49,7 +50,7 @@ public class Game implements Observer {
 
     private boolean isPause;
 
-    public Game(int level){
+    public Game(int level) throws IOException {
         //게임 초기
         running=new RunningMode(this);
         gameover=new GameOverMode(this);

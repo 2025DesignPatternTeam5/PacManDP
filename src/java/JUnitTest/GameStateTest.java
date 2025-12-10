@@ -23,7 +23,7 @@ public class GameStateTest {
     UIPanel ui;
 
     @BeforeEach
-    public void setUp() {
+    public void setUp() throws IOException {
         ui=new UIPanel(0,0);
         GameLauncher.setUIPanel(ui);
         game = new Game(0);
