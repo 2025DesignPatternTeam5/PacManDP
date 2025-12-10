@@ -133,6 +133,11 @@ public abstract class Ghost extends MovingEntity {
         return state;
     }
 
+    public static void initGhostCnt() {
+        frightenedCnt = 0;
+        eatenCnt = 0;
+    }
+
     @Override
     public void update() {
         if (!Game.getFirstInput()) return; //Les fantômes ne bougent pas tant que le joueur n'a pas bougé

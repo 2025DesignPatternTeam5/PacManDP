@@ -283,6 +283,7 @@ public class Game implements Observer {
                 g.setStayMode();
                 g.getState().lvlGhost(level);
             }
+            Ghost.initGhostCnt();
         });
 
         if(pacman.isLifeZero()) {
