@@ -39,5 +39,6 @@ public class GameLauncher {
     public static UIPanel getUIPanel() {
         return uiPanel;
     }
+    public static void setUIPanel(UIPanel panel) {uiPanel = panel;} //반드시 테스트에서만 사용할 것
     public static void setPacman(Pacman pacman) { uiPanel.setPacman(pacman); }
 }

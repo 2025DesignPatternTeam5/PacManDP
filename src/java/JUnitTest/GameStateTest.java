@@ -19,20 +19,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 
 public class GameStateTest {
-    Game game=new Game(0);
+    Game game;
     UIPanel ui;
-    JPanel gameWindow = new JPanel(new BorderLayout());
 
     @BeforeEach
     public void setUp() {
-        try {
-            gameWindow.add(new GameplayPanel(448,496), BorderLayout.CENTER); //448 496
-        } catch (
-                IOException e) {
-            e.printStackTrace();
-        }
         ui=new UIPanel(0,0);
-        gameWindow.add(ui, BorderLayout.NORTH);
+        GameLauncher.setUIPanel(ui);
+        game = new Game(0);
         ui.updateScore(100);
     }
     @Test
