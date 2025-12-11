@@ -2,7 +2,10 @@
 설계패턴 Term Project : Pac Man
 ### 📜 문서 (Documentation)
 프로젝트의 **요구사항, 설계 결정, 구현 세부 사항**
-* [**프로젝트 Docs 바로가기**](https://github.com/2025DesignPatternTeam5/PacManDP/blob/main/%EC%84%A4%EA%B3%84%ED%8C%A8%ED%84%B4_Term_Project_%EB%B3%B4%EA%B3%A0%EC%84%9C_Team5.pdf)
+* [**프로젝트 Docs 폴더 바로가기**](https://github.com/2025DesignPatternTeam5/PacManDP/tree/main/docs)
+* [**프로젝트 보고서**](https://github.com/2025DesignPatternTeam5/PacManDP/blob/main/docs/%EC%84%A4%EA%B3%84%ED%8C%A8%ED%84%B4_Term_Project_%EB%B3%B4%EA%B3%A0%EC%84%9C_Team5.pdf)
+* [**프로젝트 발표 자료 ppt**](https://github.com/2025DesignPatternTeam5/PacManDP/blob/main/docs/Team5_%EC%84%A4%EA%B3%84%ED%8C%A8%ED%84%B4_%EB%B0%9C%ED%91%9CPPT.pptx)
+* [**프로젝트 발표 자료 pdf**](https://github.com/2025DesignPatternTeam5/PacManDP/blob/main/docs/Team5_%EC%84%A4%EA%B3%84%ED%8C%A8%ED%84%B4_%EB%B0%9C%ED%91%9CPPT.pdf)
 
 ### 📐 설계 다이어그램 (Diagrams)
 Pac Man 프로젝트에 적용된 **디자인 패턴(Design Patterns)** 및 전체 **시스템 구조**를 시각적으로 보여줍니다.
