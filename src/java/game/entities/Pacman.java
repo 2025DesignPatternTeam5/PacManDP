@@ -242,6 +242,8 @@ public class Pacman extends MovingEntity implements Sujet {
         }
     }
 
+    public static void initLifeCnt() {lifeCnt = 3;}
+
     public int getLifeCnt() { return lifeCnt; }
     public void increaseLifeCnt() {
         SoundManager.getInstance().play(SoundManager.Sound.PAC_EXTRA);

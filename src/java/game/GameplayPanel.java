@@ -1,5 +1,6 @@
 package game;
 
+import game.entities.Pacman;
 import game.gameState.GameOverMode;
 import game.gameState.GameState;
 import game.gameState.RunningMode;
@@ -55,7 +56,6 @@ public class GameplayPanel extends JPanel implements Runnable {
         g = (Graphics2D) img.getGraphics();
 
         key = new KeyHandler(this);
-
         game = new Game(level);
         game.delegatelvlGhost(level);
 
@@ -242,6 +242,7 @@ public class GameplayPanel extends JPanel implements Runnable {
             else if(game.getGameState().state_now()==2){
                 if (key.k_y.isPressed) {
                     level=0;
+                    Pacman.initLifeCnt();
                     GameLauncher.getUIPanel().scoreReset();
                     GameLauncher.getUIPanel().updateScore(0);
                     cleanup();
