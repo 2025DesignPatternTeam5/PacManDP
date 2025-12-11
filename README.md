@@ -6,7 +6,7 @@
 
 ### 📐 설계 다이어그램 (Diagrams)
 Pac Man 프로젝트에 적용된 **디자인 패턴(Design Patterns)** 및 전체 **시스템 구조**를 시각적으로 보여줍니다.
-* [**기존 전체 클래스 다이어그램**](https://github.com/2025DesignPatternTeam5/PacManDP/blob/main/Diagram/ClassDiagram.png)
+* [**기존 전체 클래스 다이어그램**](https://github.com/2025DesignPatternTeam5/PacManDP/blob/main/Diagram/PacmanUMLDiagram.png)
 * [**수정된 전체 클래스 다이어그램**](https://github.com/2025DesignPatternTeam5/PacManDP/blob/main/Diagram/PlantUML-all-Pacman%20Game%20Structure.png) 
 * [**gameState 다이어그램**](https://github.com/2025DesignPatternTeam5/PacManDP/blob/main/Diagram/gameState_2.png)
 * [**ghostState 다이어그램**](https://github.com/2025DesignPatternTeam5/PacManDP/blob/main/Diagram/ghostState_2.png)
