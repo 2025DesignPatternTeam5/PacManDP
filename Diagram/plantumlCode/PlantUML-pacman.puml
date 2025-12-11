@@ -139,9 +139,10 @@ class game.pacmanEffect.SpeedDownEffect {
 }
 
 
+interface game.Sujet {}
 
 
-game.entities.Sujet <|.. game.entities.Pacman
+game.Sujet <|.. game.entities.Pacman
 game.entities.MovingEntity <|-- game.entities.Pacman
 game.pacmanEffect.EffectCommand <|-- game.pacmanEffect.SpeedUpEffect
 game.pacmanEffect.EffectCommand <|-- game.pacmanEffect.InvulnerableEffect
