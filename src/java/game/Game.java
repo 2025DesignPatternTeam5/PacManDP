@@ -280,11 +280,11 @@ public class Game implements Observer {
         float length = SoundManager.getInstance().getClipLength(SoundManager.Sound.FAIL);
         Awaiter.delay(length, ()-> {
             resetMovingEntities();
+            Ghost.initGhostCnt();
             for(Ghost g : ghosts) {
                 g.setStayMode();
                 g.getState().lvlGhost(level);
             }
-            Ghost.initGhostCnt();
         });
 
         if(pacman.isLifeZero()) {

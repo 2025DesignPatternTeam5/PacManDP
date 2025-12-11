@@ -20,7 +20,7 @@ public class Pacman extends MovingEntity implements Sujet {
     private List<Observer> observerCollection;
     private List<EffectCommand> activeEffects; // 아이템으로 인한 상태 관리
     private float pacgumSoundTimer;
-    private int lifeCnt = 3;
+    private static int lifeCnt = 3;
 
     public Pacman(int xPos, int yPos) {
         super(32, xPos, yPos, 2, "pacman.png", 4, 0.3f);
