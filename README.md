@@ -10,6 +10,7 @@ Pac Man 프로젝트에 적용된 **디자인 패턴(Design Patterns)** 및 전�
 * [**수정된 전체 클래스 다이어그램**](https://github.com/2025DesignPatternTeam5/PacManDP/blob/main/Diagram/PlantUML-all-Pacman%20Game%20Structure.png) 
 * [**gameState 다이어그램**](https://github.com/2025DesignPatternTeam5/PacManDP/blob/main/Diagram/gameState_2.png)
 * [**ghostState 다이어그램**](https://github.com/2025DesignPatternTeam5/PacManDP/blob/main/Diagram/ghostState_2.png)
+* [**그 외 다이어그램**](https://github.com/2025DesignPatternTeam5/PacManDP/tree/main/Diagram)
 
 ### 💻 GitHub 저장소 (Repository)
 최신 소스 코드를 확인하고, 이슈를 보고하거나 기여할 수 있는 메인 저장소입니다.
